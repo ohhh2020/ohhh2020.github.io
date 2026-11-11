@@ -2,8 +2,8 @@
 title: 纪念逝去的第一篇博客
 published: 2026-03-16
 description: "此网站为更换电脑后的第二版。长风破浪会有时，直挂云帆济沧海。"
-tags: [生活, 随笔]
-category: 生活
+tags: [生活, 随笔, 旧文归档]
+category: 旧文归档
 draft: false
 ---
 

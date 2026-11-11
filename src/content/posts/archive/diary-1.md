@@ -2,8 +2,8 @@
 title: 第一篇日记(已复活)
 published: 2025-10-04
 description: "第一篇日记：网站稀里糊涂的就搭好了。长风破浪会有时，直挂云帆济沧海。"
-tags: [日记, 生活]
-category: 日记
+tags: [日记, 生活, 旧文归档]
+category: 旧文归档
 draft: false
 ---
 

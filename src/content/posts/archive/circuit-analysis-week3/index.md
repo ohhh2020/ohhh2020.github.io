@@ -2,8 +2,8 @@
 title: 第三周电路分析疑难
 published: 2026-03-17
 description: "电路分析第三周学习疑难记录"
-tags: [学习, 电路]
-category: 学习
+tags: [学习, 电路, 旧文归档]
+category: 旧文归档
 draft: false
 ---
 

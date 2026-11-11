@@ -2,8 +2,8 @@
 title: 记韩式火鸡面
 published: 2026-03-16
 description: "今与吾室友妄言意图尝遍食堂，本欲点韩式火鸡面一试，不料竟阴沟翻船，反增一肚子气。"
-tags: [生活, 随笔, 食堂]
-category: 随笔
+tags: [生活, 随笔, 食堂, 旧文归档]
+category: 旧文归档
 draft: false
 ---
 

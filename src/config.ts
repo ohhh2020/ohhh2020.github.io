@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "两个蠢波一的博客",
+	title: "生的博客",
 	subtitle: "长风破浪会有时，直挂云帆济沧海",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
@@ -49,7 +49,7 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/avatar.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-	name: "生哥 & 彾九平",
+	name: "生",
 	bio: "此网站为更换电脑后的第二版。长风破浪会有时，直挂云帆济沧海。",
 	links: [
 		{
