@@ -21,7 +21,10 @@ const config = profileConfig;
     <div class="px-2">
         <div class="font-bold text-xl text-center mb-1 dark:text-neutral-50 transition">{config.name}</div>
         <div class="h-1 w-5 bg-[var(--primary)] mx-auto rounded-full mb-2 transition"></div>
-        <div class="text-center text-neutral-400 mb-2.5 transition">{config.bio}</div>
+        <div class="text-center text-neutral-400 mb-2.5 text-xs md:text-sm min-h-[1.5rem] flex items-center justify-center">
+            <span id="typewriter-text" class="transition">{config.bio}</span>
+            <span class="inline-block w-1.5 h-3.5 ml-1 bg-[var(--primary)] align-middle animate-pulse"></span>
+        </div>
         <div class="flex flex-wrap gap-2 justify-center mb-1">
             {config.links.length > 1 && config.links.map(item =>
                     <a rel="me" aria-label={item.name} href={item.url} target="_blank" class="btn-regular rounded-lg h-10 w-10 active:scale-90">
@@ -36,4 +39,63 @@ const config = profileConfig;
         </div>
     </div>
 </div>
+
+<script>
+    const quotes = [
+        "此网站为更换电脑后的第三版。",
+        "长风破浪会有时，直挂云帆济沧海。",
+        "Stay hungry, stay foolish.",
+        "代码筑梦，探索未知的星辰大海。"
+    ];
+
+    let currentQuoteIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+    let typewriterTimeout: any = null;
+
+    function typeWriter() {
+        const textElement = document.getElementById("typewriter-text");
+        if (!textElement) return;
+
+        const currentQuote = quotes[currentQuoteIndex];
+
+        if (isDeleting) {
+            textElement.innerText = currentQuote.substring(0, currentCharIndex - 1);
+            currentCharIndex--;
+            typingSpeed = 40;
+        } else {
+            textElement.innerText = currentQuote.substring(0, currentCharIndex + 1);
+            currentCharIndex++;
+            typingSpeed = 90;
+        }
+
+        if (!isDeleting && currentCharIndex === currentQuote.length) {
+            isDeleting = true;
+            typingSpeed = 2200; // 停留时间
+        } else if (isDeleting && currentCharIndex === 0) {
+            isDeleting = false;
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            typingSpeed = 500;
+        }
+
+        typewriterTimeout = setTimeout(typeWriter, typingSpeed);
+    }
+
+    function initTypewriter() {
+        if (typewriterTimeout) clearTimeout(typewriterTimeout);
+        currentCharIndex = 0;
+        isDeleting = false;
+        typeWriter();
+    }
+
+    initTypewriter();
+
+    // Swup 页面无缝切换时重启打字机
+    // @ts-ignore
+    window.swup?.hooks?.on("page:view", () => {
+        initTypewriter();
+    });
+</script>
+
 

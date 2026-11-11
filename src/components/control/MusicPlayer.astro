@@ -1,0 +1,118 @@
+---
+---
+<!-- 极简科技悬浮胶囊音乐播放器 -->
+<div id="music-player-capsule" class="fixed bottom-6 left-6 z-40 select-none">
+    <div class="card-base shadow-xl backdrop-blur-md bg-white/70 dark:bg-black/60 border border-black/5 dark:border-white/10 rounded-full px-3.5 py-2 flex items-center gap-3 transition-all duration-300 hover:scale-105">
+        <!-- 旋转黑胶唱片 -->
+        <button id="music-toggle-btn" aria-label="播放/暂停音乐" class="relative w-8 h-8 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center cursor-pointer overflow-hidden shadow-inner active:scale-95 transition-transform">
+            <div id="vinyl-disc" class="w-full h-full flex items-center justify-center">
+                <!-- 黑胶纹路 -->
+                <div class="w-4 h-4 rounded-full bg-[var(--primary)] border-2 border-black flex items-center justify-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                </div>
+            </div>
+        </button>
+
+        <!-- 曲目信息与动态波形 -->
+        <div class="flex flex-col cursor-pointer" id="music-info-area">
+            <div class="flex items-center gap-1.5">
+                <span id="music-title" class="text-xs font-semibold text-black/80 dark:text-white/80 max-w-[90px] md:max-w-[120px] truncate">
+                    Chill Lofi Code
+                </span>
+                <!-- 动态跳动波形条 -->
+                <div id="music-waves" class="flex items-end gap-0.5 h-3 opacity-40 transition-opacity">
+                    <span class="w-0.5 h-1 bg-[var(--primary)] rounded-full"></span>
+                    <span class="w-0.5 h-2 bg-[var(--primary)] rounded-full"></span>
+                    <span class="w-0.5 h-3 bg-[var(--primary)] rounded-full"></span>
+                </div>
+            </div>
+            <span class="text-[10px] text-neutral-400 dark:text-neutral-500">
+                Lofi Ambient
+            </span>
+        </div>
+
+        <!-- 音量/静音切换图标 -->
+        <button id="music-mute-btn" aria-label="静音" class="text-neutral-400 hover:text-[var(--primary)] text-sm transition px-1">
+            <svg id="music-volume-icon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- 隐藏式音频对象 (使用高质量免版税 Lofi 音乐) -->
+    <audio id="global-bgm-audio" loop preload="none">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg" />
+    </audio>
+</div>
+
+<style>
+    @keyframes vinyl-rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes sound-wave {
+        0%, 100% { height: 3px; }
+        50% { height: 12px; }
+    }
+
+    .vinyl-spinning {
+        animation: vinyl-rotate 5s linear infinite;
+    }
+
+    .wave-playing span:nth-child(1) {
+        animation: sound-wave 0.8s ease-in-out infinite alternate;
+    }
+    .wave-playing span:nth-child(2) {
+        animation: sound-wave 0.6s ease-in-out infinite 0.2s alternate;
+    }
+    .wave-playing span:nth-child(3) {
+        animation: sound-wave 0.9s ease-in-out infinite 0.4s alternate;
+    }
+</style>
+
+<script>
+    const audio = document.getElementById("global-bgm-audio") as HTMLAudioElement;
+    const toggleBtn = document.getElementById("music-toggle-btn");
+    const vinyl = document.getElementById("vinyl-disc");
+    const waves = document.getElementById("music-waves");
+    const muteBtn = document.getElementById("music-mute-btn");
+    const infoArea = document.getElementById("music-info-area");
+
+    function updatePlayState(playing: boolean) {
+        if (playing) {
+            vinyl?.classList.add("vinyl-spinning");
+            waves?.classList.add("wave-playing");
+            waves?.classList.remove("opacity-40");
+            waves?.classList.add("opacity-100");
+        } else {
+            vinyl?.classList.remove("vinyl-spinning");
+            waves?.classList.remove("wave-playing");
+            waves?.classList.add("opacity-40");
+            waves?.classList.remove("opacity-100");
+        }
+    }
+
+    function togglePlay() {
+        if (!audio) return;
+        if (audio.paused) {
+            audio.play().then(() => {
+                updatePlayState(true);
+            }).catch(() => {
+                console.log("Audio autoplay prevented");
+            });
+        } else {
+            audio.pause();
+            updatePlayState(false);
+        }
+    }
+
+    toggleBtn?.addEventListener("click", togglePlay);
+    infoArea?.addEventListener("click", togglePlay);
+
+    muteBtn?.addEventListener("click", () => {
+        if (!audio) return;
+        audio.muted = !audio.muted;
+        muteBtn.style.opacity = audio.muted ? "0.3" : "1";
+    });
+</script>
