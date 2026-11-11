@@ -2,13 +2,10 @@
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { musicConfig } from "../config";
 
-const defaultPlaylistId = musicConfig.neteasePlaylistId || "2971528746";
-const categories = musicConfig.categories || [
-    { name: "全部曲库 (6000+)", id: "2971528746", desc: "六千余首庞大音乐宇宙，开启随机漫步" }
-];
+const playlistId = musicConfig.neteasePlaylistId || "2971528746";
 ---
 
-<MainGridLayout title="音乐空间" description="生的专属音乐空间与分类歌单">
+<MainGridLayout title="音乐空间" description="生的专属音乐空间与红心曲库">
     <!-- 音乐主卡片 -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex flex-col md:flex-row items-center gap-6">
@@ -26,88 +23,57 @@ const categories = musicConfig.categories || [
             <div class="flex-1 text-center md:text-left">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-semibold mb-2">
                     <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></span>
-                    网易云账号已联动 (6000+ 首)
+                    网易云个人曲库已连接 (6,000+ 首)
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-black/90 dark:text-white/90 mb-2">
                     生的私人音乐宇宙
                 </h1>
                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                    已连接你个人账号的 6,000+ 首红心音乐库，开启智能随机漫步。下方提供精选分类标签，点击即可即时切换音乐风格。
+                    已直连你的网易云专属红心歌单，已开启全局智能随机漫步模式，随心畅听。
                 </p>
 
-                <!-- 快捷换歌单交互栏 -->
+                <!-- 播放模式切换与输入框 -->
                 <div class="flex flex-wrap items-center gap-2 max-w-md mx-auto md:mx-0">
-                    <input
-                        id="playlist-input"
-                        type="text"
-                        placeholder="输入网易云歌单ID或分享链接"
-                        class="flex-1 text-xs px-3.5 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-black/5 dark:border-white/10 outline-none focus:border-[var(--primary)] transition"
-                    />
-                    <button
-                        id="load-playlist-btn"
-                        class="px-4 py-2 rounded-xl bg-[var(--primary)] text-white text-xs font-semibold hover:opacity-90 active:scale-95 transition"
-                    >
-                        载入歌单
-                    </button>
+                    <div class="flex rounded-xl bg-neutral-100 dark:bg-neutral-800 p-1 border border-black/5 dark:border-white/10 text-xs font-semibold">
+                        <button id="mode-aplayer-btn" class="px-3 py-1.5 rounded-lg bg-[var(--primary)] text-white shadow-sm transition">
+                            极简黑胶
+                        </button>
+                        <button id="mode-official-btn" class="px-3 py-1.5 rounded-lg text-neutral-500 dark:text-neutral-400 hover:text-[var(--primary)] transition">
+                            网易云官方原版 (支持VIP)
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 歌单分类选项卡 -->
-    <div class="card-base p-4 md:p-6 rounded-2xl mb-6 onload-animation">
-        <div class="text-xs font-bold text-neutral-400 mb-3 uppercase tracking-wider">
-            音乐风格与场景分类
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="category-tabs">
-            {categories.map((cat, idx) => (
-                <button
-                    data-id={cat.id}
-                    class:list={[
-                        "category-tab-btn text-left p-3 rounded-xl border transition-all duration-200 cursor-pointer active:scale-95 flex flex-col justify-between",
-                        idx === 0
-                            ? "bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)] shadow-sm active-tab"
-                            : "bg-neutral-50 dark:bg-neutral-800/40 border-black/5 dark:border-white/5 hover:border-[var(--primary)]/50 text-black/80 dark:text-white/80"
-                    ]}
-                >
-                    <div class="font-bold text-sm mb-1">{cat.name}</div>
-                    <div class="text-[11px] text-neutral-400 dark:text-neutral-500 line-clamp-2 leading-relaxed">
-                        {cat.desc}
-                    </div>
-                </button>
-            ))}
-        </div>
-    </div>
-
-    <!-- 播放器区域 (APlayer + MetingJS) -->
+    <!-- 播放器区域 -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
             <div class="flex items-center gap-2 font-bold text-base md:text-lg text-black/85 dark:text-white/85">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
-                <span id="now-playing-label">当前歌单：全部曲库 (6000+ 首随机漫步)</span>
+                <span id="player-title">当前歌单：网易云 6000+ 首红心曲库</span>
             </div>
             <a
-                id="open-in-netease"
                 target="_blank"
-                href={`https://music.163.com/#/playlist?id=${defaultPlaylistId}`}
+                href={`https://music.163.com/#/playlist?id=${playlistId}`}
                 class="text-xs text-[var(--primary)] hover:underline flex items-center gap-1"
             >
-                在网易云中打开
+                在网易云 App 中打开
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
             </a>
         </div>
 
-        <!-- 播放器挂载点 -->
-        <div id="aplayer-container" class="rounded-xl overflow-hidden min-h-[300px]">
+        <!-- 播放器 1：APlayer + MetingJS (极简黑胶) -->
+        <div id="aplayer-wrapper" class="rounded-xl overflow-hidden min-h-[300px]">
             <meting-js
-                id="meting-player"
                 server="netease"
                 type="playlist"
-                id={defaultPlaylistId}
+                id={playlistId}
                 theme="var(--primary)"
                 autoplay="false"
                 loop="all"
@@ -117,16 +83,27 @@ const categories = musicConfig.categories || [
                 list-max-height="450px"
             ></meting-js>
         </div>
+
+        <!-- 播放器 2：网易云官方原版外链播放器 (支持调用本地 VIP 登录态) -->
+        <div id="official-wrapper" class="rounded-xl overflow-hidden hidden">
+            <iframe
+                title="网易云官方播放器"
+                width="100%"
+                height="450"
+                src={`https://music.163.com/outchain/player?type=0&id=${playlistId}&auto=0&height=430`}
+                class="w-full rounded-xl border-0 bg-white dark:bg-neutral-900"
+            ></iframe>
+        </div>
     </div>
 
-    <!-- 6000首大曲库分类贴士 -->
+    <!-- VIP 与音频错误说明 -->
     <div class="card-base p-6 rounded-2xl mb-8 onload-animation text-xs text-neutral-500 dark:text-neutral-400 space-y-2.5">
         <div class="font-bold text-black/80 dark:text-white/80 text-sm mb-1 flex items-center gap-2">
-            <span>💡 关于 6,000 首超大曲库的分类与管理建议</span>
+            <span>💡 为什么会提示 "An audio error has occurred"？如何畅听 VIP 歌曲？</span>
         </div>
-        <p>• <strong>智能随机漫游</strong>：因为你的曲库超过 6,000 首，播放器默认启用了 <strong>随机乱序播放（order="random"）</strong>，每次访问都会随机遇到你红心收藏里的宝藏曲目。</p>
-        <p>• <strong>在网易云分类建立子歌单</strong>：你可以在网易云 App 的【我喜欢的音乐】顶部，直接点击网易云自带的风格标签（例如【轻音乐】、【民谣】、【摇滚】），把筛选出来的歌曲一键新建歌单。把那些分类歌单的链接发我，就能永久加入到上面的分类选项卡里！</p>
-        <p>• <strong>即时换歌单</strong>：如果你临时想听其他公开歌单或朋友分享的歌单，直接在上方输入框粘贴链接即可载入。</p>
+        <p>• <strong>原因解释</strong>：网页开源播放器是以“匿名访客”身份向网易云服务器拉取音频流的。网易云服务器无法知道当前访客是谁，因此遇到你的 <strong>VIP 专属歌曲或版权受限歌曲</strong> 时，网易云服务端会拒绝下发音频链接，播放器便会自动跳向下一首可播歌曲。</p>
+        <p>• <strong>已优化静默跳过</strong>：已在代码中屏蔽了该报错弹窗，遇到 VIP 专享歌曲时会自动平滑顺延播放下一首，不再弹出阻断提示。</p>
+        <p>• <strong>官方 VIP 原版播放器</strong>：如果你想在博客上直接听全部 VIP 歌曲，点击上方的 <strong>【网易云官方原版 (支持VIP)】</strong> 按钮。该播放器直接内嵌网易云官方服务，只要你的浏览器登录过网易云 VIP 账号，就能直接享受完整的 VIP 歌曲音质与播放特权！</p>
     </div>
 </MainGridLayout>
 
@@ -142,6 +119,13 @@ const categories = musicConfig.categories || [
     }
     .animate-spin-slow {
         animation: spin-slow 12s linear infinite;
+    }
+
+    /* 彻底屏蔽 APlayer 的灰色阻断错误提示气泡，静默跳过不可播歌曲 */
+    .aplayer .aplayer-notice {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* APlayer 视觉与深色模式自适应 */
@@ -182,82 +166,38 @@ const categories = musicConfig.categories || [
 </style>
 
 <script>
-    function switchPlaylist(playlistId: string, title?: string) {
-        const container = document.getElementById("aplayer-container");
-        const openLink = document.getElementById("open-in-netease") as HTMLAnchorElement;
-        const nowPlaying = document.getElementById("now-playing-label");
+    function setupPlayerModes() {
+        const aplayerBtn = document.getElementById("mode-aplayer-btn");
+        const officialBtn = document.getElementById("mode-official-btn");
+        const aplayerWrapper = document.getElementById("aplayer-wrapper");
+        const officialWrapper = document.getElementById("official-wrapper");
 
-        if (container) {
-            container.innerHTML = `
-                <meting-js
-                    server="netease"
-                    type="playlist"
-                    id="${playlistId}"
-                    theme="var(--primary)"
-                    autoplay="true"
-                    loop="all"
-                    order="random"
-                    preload="auto"
-                    list-folded="false"
-                    list-max-height="450px"
-                ></meting-js>
-            `;
-            // @ts-ignore
-            if (window.Meting) {
-                // @ts-ignore
-                window.Meting.init?.();
-            }
-        }
+        aplayerBtn?.addEventListener("click", () => {
+            aplayerBtn.classList.add("bg-[var(--primary)]", "text-white", "shadow-sm");
+            aplayerBtn.classList.remove("text-neutral-500", "dark:text-neutral-400");
+            officialBtn?.classList.remove("bg-[var(--primary)]", "text-white", "shadow-sm");
+            officialBtn?.classList.add("text-neutral-500", "dark:text-neutral-400");
 
-        if (openLink) {
-            openLink.href = `https://music.163.com/#/playlist?id=${playlistId}`;
-        }
-        if (nowPlaying && title) {
-            nowPlaying.innerText = `当前歌单：${title}`;
-        }
-    }
-
-    function setupPlaylistInteractions() {
-        const input = document.getElementById("playlist-input") as HTMLInputElement;
-        const btn = document.getElementById("load-playlist-btn");
-        const tabBtns = document.querySelectorAll<HTMLButtonElement>(".category-tab-btn");
-
-        // 分类选项卡点击切换
-        tabBtns.forEach((tab) => {
-            tab.addEventListener("click", () => {
-                const id = tab.getAttribute("data-id");
-                const name = tab.querySelector(".font-bold")?.textContent?.trim() || "";
-                if (!id) return;
-
-                // 切换激活样式
-                tabBtns.forEach(t => {
-                    t.classList.remove("bg-[var(--primary)]/10", "border-[var(--primary)]", "text-[var(--primary)]", "shadow-sm", "active-tab");
-                    t.classList.add("bg-neutral-50", "dark:bg-neutral-800/40", "border-black/5", "dark:border-white/5", "text-black/80", "dark:text-white/80");
-                });
-                tab.classList.remove("bg-neutral-50", "dark:bg-neutral-800/40", "border-black/5", "dark:border-white/5", "text-black/80", "dark:text-white/80");
-                tab.classList.add("bg-[var(--primary)]/10", "border-[var(--primary)]", "text-[var(--primary)]", "shadow-sm", "active-tab");
-
-                switchPlaylist(id, name);
-            });
+            aplayerWrapper?.classList.remove("hidden");
+            officialWrapper?.classList.add("hidden");
         });
 
-        // 手动输入框载入
-        btn?.addEventListener("click", () => {
-            const val = input?.value.trim();
-            if (!val) return;
+        officialBtn?.addEventListener("click", () => {
+            officialBtn.classList.add("bg-[var(--primary)]", "text-white", "shadow-sm");
+            officialBtn.classList.remove("text-neutral-500", "dark:text-neutral-400");
+            aplayerBtn?.classList.remove("bg-[var(--primary)]", "text-white", "shadow-sm");
+            aplayerBtn?.classList.add("text-neutral-500", "dark:text-neutral-400");
 
-            const idMatch = val.match(/id=(\d+)/) || val.match(/^(\d+)$/);
-            const playlistId = idMatch ? idMatch[1] : val;
-
-            switchPlaylist(playlistId, `自定义歌单 (${playlistId})`);
+            officialWrapper?.classList.remove("hidden");
+            aplayerWrapper?.classList.add("hidden");
         });
     }
 
-    setupPlaylistInteractions();
+    setupPlayerModes();
 
     // @ts-ignore
     window.swup?.hooks?.on("page:view", () => {
-        setupPlaylistInteractions();
+        setupPlayerModes();
         // @ts-ignore
         if (window.Meting) {
             // @ts-ignore
