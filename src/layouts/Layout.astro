@@ -564,4 +564,20 @@ if (window.swup) {
 } else {
 	document.addEventListener("swup:enable", setup)
 }
+
+// 现代科技极简点击涟漪动效
+document.addEventListener("click", (e) => {
+	const target = e.target as HTMLElement;
+	if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA") return;
+
+	const ripple = document.createElement("div");
+	ripple.className = "click-ripple-effect";
+	ripple.style.left = `${e.clientX}px`;
+	ripple.style.top = `${e.clientY}px`;
+	document.body.appendChild(ripple);
+
+	ripple.addEventListener("animationend", () => {
+		ripple.remove();
+	});
+});
 </script>

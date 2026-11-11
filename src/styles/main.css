@@ -150,3 +150,27 @@
     }
   }
 }
+
+.click-ripple-effect {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    border: 2px solid var(--primary);
+    transform: translate(-50%, -50%);
+    animation: click-ripple-anim 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes click-ripple-anim {
+    0% {
+        width: 4px;
+        height: 4px;
+        opacity: 0.85;
+    }
+    100% {
+        width: 52px;
+        height: 52px;
+        opacity: 0;
+        border-width: 1px;
+    }
+}

@@ -1,0 +1,92 @@
+---
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["card-base p-6 md:p-8 rounded-2xl mb-4 onload-animation", className]} id="comments-card">
+    <div class="flex items-center gap-2 mb-4 text-black/75 dark:text-white/75 font-bold text-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span>评论区</span>
+    </div>
+    <div id="giscus-container" class="w-full"></div>
+</div>
+
+<script>
+    function getGiscusTheme() {
+        const isDark = document.documentElement.classList.contains("dark");
+        return isDark ? "noborder_dark" : "noborder_light";
+    }
+
+    function updateGiscusTheme() {
+        const iframe = document.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage(
+            {
+                giscus: {
+                    setConfig: {
+                        theme: getGiscusTheme()
+                    }
+                }
+            },
+            "https://giscus.app"
+        );
+    }
+
+    function loadGiscus() {
+        const container = document.getElementById("giscus-container");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        const script = document.createElement("script");
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", "ohhh2020/ohhh2020.github.io");
+        script.setAttribute("data-repo-id", "R_kgDOP8GDHQ");
+        script.setAttribute("data-category", "Announcements");
+        script.setAttribute("data-category-id", "DIC_kwDOP8GDHc4DK4aW");
+        script.setAttribute("data-mapping", "pathname");
+        script.setAttribute("data-strict", "0");
+        script.setAttribute("data-reactions-enabled", "1");
+        script.setAttribute("data-emit-metadata", "0");
+        script.setAttribute("data-input-position", "bottom");
+        script.setAttribute("data-theme", getGiscusTheme());
+        script.setAttribute("data-lang", "zh-CN");
+        script.crossOrigin = "anonymous";
+        script.async = true;
+
+        container.appendChild(script);
+    }
+
+    // Observer for dark mode toggle
+    const themeObserver = new MutationObserver(() => {
+        updateGiscusTheme();
+    });
+
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"]
+    });
+
+    // Initialize on page load
+    loadGiscus();
+
+    // Hook into Swup for page transitions
+    const setupSwup = () => {
+        // @ts-ignore
+        window.swup?.hooks?.on("page:view", () => {
+            loadGiscus();
+        });
+    };
+
+    // @ts-ignore
+    if (window.swup) {
+        setupSwup();
+    } else {
+        document.addEventListener("swup:enable", setupSwup);
+    }
+</script>
