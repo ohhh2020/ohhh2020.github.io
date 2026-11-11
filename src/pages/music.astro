@@ -2,20 +2,21 @@
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { musicConfig } from "../config";
 
-const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
+const defaultPlaylistId = musicConfig.neteasePlaylistId || "2971528746";
+const categories = musicConfig.categories || [
+    { name: "全部曲库 (6000+)", id: "2971528746", desc: "六千余首庞大音乐宇宙，开启随机漫步" }
+];
 ---
 
-<MainGridLayout title="音乐空间" description="生的专属音乐空间与精选歌单">
+<MainGridLayout title="音乐空间" description="生的专属音乐空间与分类歌单">
     <!-- 音乐主卡片 -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex flex-col md:flex-row items-center gap-6">
-            <!-- 唱片机视效 (非二次元、高端金属与黑胶科技质感) -->
+            <!-- 唱片机视效 -->
             <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-neutral-950 border-4 border-neutral-800 shadow-2xl flex items-center justify-center shrink-0 group">
-                <!-- 黑胶同心圆纹路 -->
                 <div class="absolute inset-2 rounded-full border border-neutral-800/80 pointer-events-none"></div>
                 <div class="absolute inset-5 rounded-full border border-neutral-800/60 pointer-events-none"></div>
                 <div class="absolute inset-8 rounded-full border border-neutral-800/40 pointer-events-none"></div>
-                <!-- 唱片中心标贴 -->
                 <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-tr from-[var(--primary)] to-cyan-500 flex items-center justify-center shadow-lg animate-spin-slow">
                     <div class="w-4 h-4 rounded-full bg-neutral-950 border-2 border-white/80"></div>
                 </div>
@@ -25,13 +26,13 @@ const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
             <div class="flex-1 text-center md:text-left">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-semibold mb-2">
                     <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></span>
-                    网易云音乐实时同步
+                    网易云账号已联动 (6000+ 首)
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-black/90 dark:text-white/90 mb-2">
-                    生的专属音乐站 / Music Station
+                    生的私人音乐宇宙
                 </h1>
                 <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                    音乐是代码与灵感的共鸣。支持一键绑定你的网易云公开歌单，实时同步你收藏的全部歌曲。
+                    已连接你个人账号的 6,000+ 首红心音乐库，开启智能随机漫步。下方提供精选分类标签，点击即可即时切换音乐风格。
                 </p>
 
                 <!-- 快捷换歌单交互栏 -->
@@ -53,6 +54,31 @@ const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
         </div>
     </div>
 
+    <!-- 歌单分类选项卡 -->
+    <div class="card-base p-4 md:p-6 rounded-2xl mb-6 onload-animation">
+        <div class="text-xs font-bold text-neutral-400 mb-3 uppercase tracking-wider">
+            音乐风格与场景分类
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="category-tabs">
+            {categories.map((cat, idx) => (
+                <button
+                    data-id={cat.id}
+                    class:list={[
+                        "category-tab-btn text-left p-3 rounded-xl border transition-all duration-200 cursor-pointer active:scale-95 flex flex-col justify-between",
+                        idx === 0
+                            ? "bg-[var(--primary)]/10 border-[var(--primary)] text-[var(--primary)] shadow-sm active-tab"
+                            : "bg-neutral-50 dark:bg-neutral-800/40 border-black/5 dark:border-white/5 hover:border-[var(--primary)]/50 text-black/80 dark:text-white/80"
+                    ]}
+                >
+                    <div class="font-bold text-sm mb-1">{cat.name}</div>
+                    <div class="text-[11px] text-neutral-400 dark:text-neutral-500 line-clamp-2 leading-relaxed">
+                        {cat.desc}
+                    </div>
+                </button>
+            ))}
+        </div>
+    </div>
+
     <!-- 播放器区域 (APlayer + MetingJS) -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
@@ -60,7 +86,7 @@ const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
-                <span>正在播放</span>
+                <span id="now-playing-label">当前歌单：全部曲库 (6000+ 首随机漫步)</span>
             </div>
             <a
                 id="open-in-netease"
@@ -85,22 +111,22 @@ const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
                 theme="var(--primary)"
                 autoplay="false"
                 loop="all"
-                order="list"
+                order="random"
                 preload="auto"
                 list-folded="false"
+                list-max-height="450px"
             ></meting-js>
         </div>
     </div>
 
-    <!-- 教程指引小贴士卡片 -->
-    <div class="card-base p-6 rounded-2xl mb-8 onload-animation text-xs text-neutral-500 dark:text-neutral-400 space-y-2">
+    <!-- 6000首大曲库分类贴士 -->
+    <div class="card-base p-6 rounded-2xl mb-8 onload-animation text-xs text-neutral-500 dark:text-neutral-400 space-y-2.5">
         <div class="font-bold text-black/80 dark:text-white/80 text-sm mb-1 flex items-center gap-2">
-            <span>💡 如何获取你自己的网易云歌单 ID？</span>
+            <span>💡 关于 6,000 首超大曲库的分类与管理建议</span>
         </div>
-        <p>1. 打开电脑端或手机端【网易云音乐】App，进入你想展示的歌单（如“我喜欢的音乐”或自建歌单，需设为公开）。</p>
-        <p>2. 点击【分享】按钮 ➔ 选择【复制链接】。</p>
-        <p>3. 链接形如：<code class="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--primary)] font-mono">https://music.163.com/playlist?id=123456789&...</code>，其中的数字 <code class="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--primary)] font-mono">123456789</code> 就是你的歌单 ID！</p>
-        <p>4. 你可以在上方输入框直接粘贴进行预览，或者告诉我你的 ID，我帮你永久固定写入博客配置中。</p>
+        <p>• <strong>智能随机漫游</strong>：因为你的曲库超过 6,000 首，播放器默认启用了 <strong>随机乱序播放（order="random"）</strong>，每次访问都会随机遇到你红心收藏里的宝藏曲目。</p>
+        <p>• <strong>在网易云分类建立子歌单</strong>：你可以在网易云 App 的【我喜欢的音乐】顶部，直接点击网易云自带的风格标签（例如【轻音乐】、【民谣】、【摇滚】），把筛选出来的歌曲一键新建歌单。把那些分类歌单的链接发我，就能永久加入到上面的分类选项卡里！</p>
+        <p>• <strong>即时换歌单</strong>：如果你临时想听其他公开歌单或朋友分享的歌单，直接在上方输入框粘贴链接即可载入。</p>
     </div>
 </MainGridLayout>
 
@@ -156,53 +182,82 @@ const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
 </style>
 
 <script>
-    function setupPlaylistLoader() {
-        const input = document.getElementById("playlist-input") as HTMLInputElement;
-        const btn = document.getElementById("load-playlist-btn");
+    function switchPlaylist(playlistId: string, title?: string) {
         const container = document.getElementById("aplayer-container");
         const openLink = document.getElementById("open-in-netease") as HTMLAnchorElement;
+        const nowPlaying = document.getElementById("now-playing-label");
 
+        if (container) {
+            container.innerHTML = `
+                <meting-js
+                    server="netease"
+                    type="playlist"
+                    id="${playlistId}"
+                    theme="var(--primary)"
+                    autoplay="true"
+                    loop="all"
+                    order="random"
+                    preload="auto"
+                    list-folded="false"
+                    list-max-height="450px"
+                ></meting-js>
+            `;
+            // @ts-ignore
+            if (window.Meting) {
+                // @ts-ignore
+                window.Meting.init?.();
+            }
+        }
+
+        if (openLink) {
+            openLink.href = `https://music.163.com/#/playlist?id=${playlistId}`;
+        }
+        if (nowPlaying && title) {
+            nowPlaying.innerText = `当前歌单：${title}`;
+        }
+    }
+
+    function setupPlaylistInteractions() {
+        const input = document.getElementById("playlist-input") as HTMLInputElement;
+        const btn = document.getElementById("load-playlist-btn");
+        const tabBtns = document.querySelectorAll<HTMLButtonElement>(".category-tab-btn");
+
+        // 分类选项卡点击切换
+        tabBtns.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                const id = tab.getAttribute("data-id");
+                const name = tab.querySelector(".font-bold")?.textContent?.trim() || "";
+                if (!id) return;
+
+                // 切换激活样式
+                tabBtns.forEach(t => {
+                    t.classList.remove("bg-[var(--primary)]/10", "border-[var(--primary)]", "text-[var(--primary)]", "shadow-sm", "active-tab");
+                    t.classList.add("bg-neutral-50", "dark:bg-neutral-800/40", "border-black/5", "dark:border-white/5", "text-black/80", "dark:text-white/80");
+                });
+                tab.classList.remove("bg-neutral-50", "dark:bg-neutral-800/40", "border-black/5", "dark:border-white/5", "text-black/80", "dark:text-white/80");
+                tab.classList.add("bg-[var(--primary)]/10", "border-[var(--primary)]", "text-[var(--primary)]", "shadow-sm", "active-tab");
+
+                switchPlaylist(id, name);
+            });
+        });
+
+        // 手动输入框载入
         btn?.addEventListener("click", () => {
             const val = input?.value.trim();
             if (!val) return;
 
-            // 提取纯数字 ID (支持直接填数字，或直接粘贴完整分享链接)
             const idMatch = val.match(/id=(\d+)/) || val.match(/^(\d+)$/);
             const playlistId = idMatch ? idMatch[1] : val;
 
-            if (container) {
-                // 重载 Meting 实例
-                container.innerHTML = `
-                    <meting-js
-                        server="netease"
-                        type="playlist"
-                        id="${playlistId}"
-                        theme="var(--primary)"
-                        autoplay="true"
-                        loop="all"
-                        order="list"
-                        preload="auto"
-                        list-folded="false"
-                    ></meting-js>
-                `;
-                // @ts-ignore
-                if (window.Meting) {
-                    // @ts-ignore
-                    window.Meting.init?.();
-                }
-            }
-
-            if (openLink) {
-                openLink.href = `https://music.163.com/#/playlist?id=${playlistId}`;
-            }
+            switchPlaylist(playlistId, `自定义歌单 (${playlistId})`);
         });
     }
 
-    setupPlaylistLoader();
+    setupPlaylistInteractions();
 
     // @ts-ignore
     window.swup?.hooks?.on("page:view", () => {
-        setupPlaylistLoader();
+        setupPlaylistInteractions();
         // @ts-ignore
         if (window.Meting) {
             // @ts-ignore

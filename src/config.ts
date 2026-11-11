@@ -57,9 +57,32 @@ export const navBarConfig: NavBarConfig = {
 
 export const musicConfig = {
 	enable: true,
-	// 可以在这里填入你的网易云歌单 ID (在网易云分享歌单链接里的 id=xxxxxxx)
-	neteasePlaylistId: "24381616",
+	// 主歌单 ID (用户的 6000+ 首红心曲库)
+	neteasePlaylistId: "2971528746",
 	server: "netease",
+	// 分类歌单列表 (支持随时扩充添加你的其他分类歌单)
+	categories: [
+		{
+			name: "全部曲库 (6000+)",
+			id: "2971528746",
+			desc: "六千余首庞大音乐宇宙，开启随机漫步",
+		},
+		{
+			name: "专注学习 / 纯音",
+			id: "2829883282",
+			desc: "适合沉浸编程、思考与阅读的氛围器乐",
+		},
+		{
+			name: "摇滚 / 动力",
+			id: "26467411",
+			desc: "充满节奏感与活力的燃向曲目",
+		},
+		{
+			name: "华语精选",
+			id: "3778678",
+			desc: "经典耐听的旋律随笔",
+		},
+	],
 };
 
 export const profileConfig: ProfileConfig = {
