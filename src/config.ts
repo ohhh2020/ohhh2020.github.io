@@ -42,6 +42,10 @@ export const navBarConfig: NavBarConfig = {
 			name: "相册",
 			url: "/pictures/",
 		},
+		{
+			name: "音乐",
+			url: "/music/",
+		},
 		LinkPreset.About,
 		{
 			name: "GitHub",
@@ -49,6 +53,13 @@ export const navBarConfig: NavBarConfig = {
 			external: true, // Show an external link icon and will open in a new tab
 		},
 	],
+};
+
+export const musicConfig = {
+	enable: true,
+	// 可以在这里填入你的网易云歌单 ID (在网易云分享歌单链接里的 id=xxxxxxx)
+	neteasePlaylistId: "24381616",
+	server: "netease",
 };
 
 export const profileConfig: ProfileConfig = {

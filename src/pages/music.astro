@@ -1,0 +1,212 @@
+---
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { musicConfig } from "../config";
+
+const defaultPlaylistId = musicConfig.neteasePlaylistId || "24381616";
+---
+
+<MainGridLayout title="音乐空间" description="生的专属音乐空间与精选歌单">
+    <!-- 音乐主卡片 -->
+    <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
+        <div class="flex flex-col md:flex-row items-center gap-6">
+            <!-- 唱片机视效 (非二次元、高端金属与黑胶科技质感) -->
+            <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-neutral-950 border-4 border-neutral-800 shadow-2xl flex items-center justify-center shrink-0 group">
+                <!-- 黑胶同心圆纹路 -->
+                <div class="absolute inset-2 rounded-full border border-neutral-800/80 pointer-events-none"></div>
+                <div class="absolute inset-5 rounded-full border border-neutral-800/60 pointer-events-none"></div>
+                <div class="absolute inset-8 rounded-full border border-neutral-800/40 pointer-events-none"></div>
+                <!-- 唱片中心标贴 -->
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-tr from-[var(--primary)] to-cyan-500 flex items-center justify-center shadow-lg animate-spin-slow">
+                    <div class="w-4 h-4 rounded-full bg-neutral-950 border-2 border-white/80"></div>
+                </div>
+            </div>
+
+            <!-- 歌单信息 -->
+            <div class="flex-1 text-center md:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-semibold mb-2">
+                    <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></span>
+                    网易云音乐实时同步
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold text-black/90 dark:text-white/90 mb-2">
+                    生的专属音乐站 / Music Station
+                </h1>
+                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                    音乐是代码与灵感的共鸣。支持一键绑定你的网易云公开歌单，实时同步你收藏的全部歌曲。
+                </p>
+
+                <!-- 快捷换歌单交互栏 -->
+                <div class="flex flex-wrap items-center gap-2 max-w-md mx-auto md:mx-0">
+                    <input
+                        id="playlist-input"
+                        type="text"
+                        placeholder="输入网易云歌单ID或分享链接"
+                        class="flex-1 text-xs px-3.5 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-black/5 dark:border-white/10 outline-none focus:border-[var(--primary)] transition"
+                    />
+                    <button
+                        id="load-playlist-btn"
+                        class="px-4 py-2 rounded-xl bg-[var(--primary)] text-white text-xs font-semibold hover:opacity-90 active:scale-95 transition"
+                    >
+                        载入歌单
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 播放器区域 (APlayer + MetingJS) -->
+    <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
+            <div class="flex items-center gap-2 font-bold text-base md:text-lg text-black/85 dark:text-white/85">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                </svg>
+                <span>正在播放</span>
+            </div>
+            <a
+                id="open-in-netease"
+                target="_blank"
+                href={`https://music.163.com/#/playlist?id=${defaultPlaylistId}`}
+                class="text-xs text-[var(--primary)] hover:underline flex items-center gap-1"
+            >
+                在网易云中打开
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+            </a>
+        </div>
+
+        <!-- 播放器挂载点 -->
+        <div id="aplayer-container" class="rounded-xl overflow-hidden min-h-[300px]">
+            <meting-js
+                id="meting-player"
+                server="netease"
+                type="playlist"
+                id={defaultPlaylistId}
+                theme="var(--primary)"
+                autoplay="false"
+                loop="all"
+                order="list"
+                preload="auto"
+                list-folded="false"
+            ></meting-js>
+        </div>
+    </div>
+
+    <!-- 教程指引小贴士卡片 -->
+    <div class="card-base p-6 rounded-2xl mb-8 onload-animation text-xs text-neutral-500 dark:text-neutral-400 space-y-2">
+        <div class="font-bold text-black/80 dark:text-white/80 text-sm mb-1 flex items-center gap-2">
+            <span>💡 如何获取你自己的网易云歌单 ID？</span>
+        </div>
+        <p>1. 打开电脑端或手机端【网易云音乐】App，进入你想展示的歌单（如“我喜欢的音乐”或自建歌单，需设为公开）。</p>
+        <p>2. 点击【分享】按钮 ➔ 选择【复制链接】。</p>
+        <p>3. 链接形如：<code class="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--primary)] font-mono">https://music.163.com/playlist?id=123456789&...</code>，其中的数字 <code class="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[var(--primary)] font-mono">123456789</code> 就是你的歌单 ID！</p>
+        <p>4. 你可以在上方输入框直接粘贴进行预览，或者告诉我你的 ID，我帮你永久固定写入博客配置中。</p>
+    </div>
+</MainGridLayout>
+
+<!-- 引入 APlayer 与 MetingJS 核心资源 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" />
+<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+<style is:global>
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+        animation: spin-slow 12s linear infinite;
+    }
+
+    /* APlayer 视觉与深色模式自适应 */
+    .aplayer {
+        font-family: inherit !important;
+        border-radius: 1rem !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+    .dark .aplayer {
+        background: transparent !important;
+        color: #f1f5f9 !important;
+    }
+    .dark .aplayer .aplayer-body,
+    .dark .aplayer .aplayer-list {
+        background: rgba(15, 23, 42, 0.6) !important;
+        color: #e2e8f0 !important;
+    }
+    .dark .aplayer .aplayer-list ol li {
+        border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    .dark .aplayer .aplayer-list ol li:hover {
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+    .dark .aplayer .aplayer-list ol li.aplayer-list-light {
+        background: rgba(255, 255, 255, 0.12) !important;
+    }
+    .dark .aplayer .aplayer-info .aplayer-music .aplayer-title {
+        color: #f8fafc !important;
+    }
+    .dark .aplayer .aplayer-info .aplayer-music .aplayer-author {
+        color: #94a3b8 !important;
+    }
+    .dark .aplayer .aplayer-info .aplayer-controller .aplayer-time {
+        color: #94a3b8 !important;
+    }
+</style>
+
+<script>
+    function setupPlaylistLoader() {
+        const input = document.getElementById("playlist-input") as HTMLInputElement;
+        const btn = document.getElementById("load-playlist-btn");
+        const container = document.getElementById("aplayer-container");
+        const openLink = document.getElementById("open-in-netease") as HTMLAnchorElement;
+
+        btn?.addEventListener("click", () => {
+            const val = input?.value.trim();
+            if (!val) return;
+
+            // 提取纯数字 ID (支持直接填数字，或直接粘贴完整分享链接)
+            const idMatch = val.match(/id=(\d+)/) || val.match(/^(\d+)$/);
+            const playlistId = idMatch ? idMatch[1] : val;
+
+            if (container) {
+                // 重载 Meting 实例
+                container.innerHTML = `
+                    <meting-js
+                        server="netease"
+                        type="playlist"
+                        id="${playlistId}"
+                        theme="var(--primary)"
+                        autoplay="true"
+                        loop="all"
+                        order="list"
+                        preload="auto"
+                        list-folded="false"
+                    ></meting-js>
+                `;
+                // @ts-ignore
+                if (window.Meting) {
+                    // @ts-ignore
+                    window.Meting.init?.();
+                }
+            }
+
+            if (openLink) {
+                openLink.href = `https://music.163.com/#/playlist?id=${playlistId}`;
+            }
+        });
+    }
+
+    setupPlaylistLoader();
+
+    // @ts-ignore
+    window.swup?.hooks?.on("page:view", () => {
+        setupPlaylistLoader();
+        // @ts-ignore
+        if (window.Meting) {
+            // @ts-ignore
+            window.Meting.init?.();
+        }
+    });
+</script>
