@@ -5,17 +5,16 @@ import { musicConfig } from "../config";
 const playlistId = musicConfig.neteasePlaylistId || "2971528746";
 ---
 
-<MainGridLayout title="音乐空间" description="生的专属音乐空间与红心曲库">
+<MainGridLayout title="音乐空间" description="生的专属音乐空间与网易云曲库">
     <!-- 音乐主卡片 -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex flex-col md:flex-row items-center gap-6">
-            <!-- 唱片机视效 -->
-            <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-neutral-950 border-4 border-neutral-800 shadow-2xl flex items-center justify-center shrink-0 group">
+            <!-- 唱片机金属视效 -->
+            <div class="relative w-28 h-28 md:w-36 md:h-36 rounded-full bg-neutral-950 border-4 border-neutral-800 shadow-2xl flex items-center justify-center shrink-0">
                 <div class="absolute inset-2 rounded-full border border-neutral-800/80 pointer-events-none"></div>
                 <div class="absolute inset-5 rounded-full border border-neutral-800/60 pointer-events-none"></div>
-                <div class="absolute inset-8 rounded-full border border-neutral-800/40 pointer-events-none"></div>
-                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-tr from-[var(--primary)] to-cyan-500 flex items-center justify-center shadow-lg animate-spin-slow">
-                    <div class="w-4 h-4 rounded-full bg-neutral-950 border-2 border-white/80"></div>
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[var(--primary)] to-cyan-500 flex items-center justify-center shadow-lg animate-spin-slow">
+                    <div class="w-3.5 h-3.5 rounded-full bg-neutral-950 border-2 border-white/80"></div>
                 </div>
             </div>
 
@@ -23,43 +22,31 @@ const playlistId = musicConfig.neteasePlaylistId || "2971528746";
             <div class="flex-1 text-center md:text-left">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-semibold mb-2">
                     <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></span>
-                    网易云个人曲库已连接 (6,000+ 首)
+                    网易云官方原版直连 · 6,000+ 首曲库
                 </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-black/90 dark:text-white/90 mb-2">
                     生的私人音乐宇宙
                 </h1>
-                <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                    已直连你的网易云专属红心歌单，已开启全局智能随机漫步模式，随心畅听。
+                <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                    已直连你的网易云官方曲库，调用网易云原生音频引擎，支持完整畅听你的 VIP 歌曲与红心收藏。
                 </p>
-
-                <!-- 播放模式切换与输入框 -->
-                <div class="flex flex-wrap items-center gap-2 max-w-md mx-auto md:mx-0">
-                    <div class="flex rounded-xl bg-neutral-100 dark:bg-neutral-800 p-1 border border-black/5 dark:border-white/10 text-xs font-semibold">
-                        <button id="mode-aplayer-btn" class="px-3 py-1.5 rounded-lg bg-[var(--primary)] text-white shadow-sm transition">
-                            极简黑胶
-                        </button>
-                        <button id="mode-official-btn" class="px-3 py-1.5 rounded-lg text-neutral-500 dark:text-neutral-400 hover:text-[var(--primary)] transition">
-                            网易云官方原版 (支持VIP)
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- 播放器区域 -->
+    <!-- 网易云官方播放器区域 (无版权/VIP报错，官方原汁原味) -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-black/5 dark:border-white/10">
             <div class="flex items-center gap-2 font-bold text-base md:text-lg text-black/85 dark:text-white/85">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                 </svg>
-                <span id="player-title">当前歌单：网易云 6000+ 首红心曲库</span>
+                <span>网易云官方原版播放器</span>
             </div>
             <a
                 target="_blank"
                 href={`https://music.163.com/#/playlist?id=${playlistId}`}
-                class="text-xs text-[var(--primary)] hover:underline flex items-center gap-1"
+                class="text-xs text-[var(--primary)] hover:underline flex items-center gap-1 font-medium"
             >
                 在网易云 App 中打开
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,49 +55,36 @@ const playlistId = musicConfig.neteasePlaylistId || "2971528746";
             </a>
         </div>
 
-        <!-- 播放器 1：APlayer + MetingJS (极简黑胶) -->
-        <div id="aplayer-wrapper" class="rounded-xl overflow-hidden min-h-[300px]">
-            <meting-js
-                server="netease"
-                type="playlist"
-                id={playlistId}
-                theme="var(--primary)"
-                autoplay="false"
-                loop="all"
-                order="random"
-                preload="auto"
-                list-folded="false"
-                list-max-height="450px"
-            ></meting-js>
-        </div>
-
-        <!-- 播放器 2：网易云官方原版外链播放器 (支持调用本地 VIP 登录态) -->
-        <div id="official-wrapper" class="rounded-xl overflow-hidden hidden">
+        <div class="w-full rounded-2xl overflow-hidden shadow-sm border border-black/5 dark:border-white/10 bg-white dark:bg-neutral-900">
             <iframe
-                title="网易云官方播放器"
+                title="网易云官方原版播放器"
                 width="100%"
-                height="450"
+                height="480"
                 src={`https://music.163.com/outchain/player?type=0&id=${playlistId}&auto=0&height=430`}
-                class="w-full rounded-xl border-0 bg-white dark:bg-neutral-900"
+                class="w-full border-0"
             ></iframe>
         </div>
     </div>
 
-    <!-- VIP 与音频错误说明 -->
-    <div class="card-base p-6 rounded-2xl mb-8 onload-animation text-xs text-neutral-500 dark:text-neutral-400 space-y-2.5">
-        <div class="font-bold text-black/80 dark:text-white/80 text-sm mb-1 flex items-center gap-2">
-            <span>💡 为什么会提示 "An audio error has occurred"？如何畅听 VIP 歌曲？</span>
+    <!-- 定制精选直链音源库专区 -->
+    <div class="card-base p-6 md:p-8 rounded-2xl mb-8 onload-animation">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-1.5 h-5 bg-[var(--primary)] rounded-full"></div>
+            <h2 class="text-lg md:text-xl font-bold text-black/90 dark:text-white/90">
+                专属精选直链音源库（待收录）
+            </h2>
         </div>
-        <p>• <strong>原因解释</strong>：网页开源播放器是以“匿名访客”身份向网易云服务器拉取音频流的。网易云服务器无法知道当前访客是谁，因此遇到你的 <strong>VIP 专属歌曲或版权受限歌曲</strong> 时，网易云服务端会拒绝下发音频链接，播放器便会自动跳向下一首可播歌曲。</p>
-        <p>• <strong>已优化静默跳过</strong>：已在代码中屏蔽了该报错弹窗，遇到 VIP 专享歌曲时会自动平滑顺延播放下一首，不再弹出阻断提示。</p>
-        <p>• <strong>官方 VIP 原版播放器</strong>：如果你想在博客上直接听全部 VIP 歌曲，点击上方的 <strong>【网易云官方原版 (支持VIP)】</strong> 按钮。该播放器直接内嵌网易云官方服务，只要你的浏览器登录过网易云 VIP 账号，就能直接享受完整的 VIP 歌曲音质与播放特权！</p>
+        <p class="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed mb-4">
+            随时把你想听的具体歌名（例如：《晴天》、《夜曲》、《漠河舞厅》等）告诉我，我会为你逐一解析出稳定、高品质的免 VIP 专属直链，定制成免客户端、即开即听的专属歌曲列表！
+        </p>
+
+        <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/40 border border-dashed border-black/10 dark:border-white/10 text-center">
+            <div class="text-xs text-neutral-400 py-2">
+                🎵 还没有添加定制直链歌曲。在对话框告诉我你的歌名，马上为你解析收录！
+            </div>
+        </div>
     </div>
 </MainGridLayout>
-
-<!-- 引入 APlayer 与 MetingJS 核心资源 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" />
-<script is:inline src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script is:inline src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
 <style is:global>
     @keyframes spin-slow {
@@ -120,88 +94,4 @@ const playlistId = musicConfig.neteasePlaylistId || "2971528746";
     .animate-spin-slow {
         animation: spin-slow 12s linear infinite;
     }
-
-    /* 彻底屏蔽 APlayer 的灰色阻断错误提示气泡，静默跳过不可播歌曲 */
-    .aplayer .aplayer-notice {
-        display: none !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-
-    /* APlayer 视觉与深色模式自适应 */
-    .aplayer {
-        font-family: inherit !important;
-        border-radius: 1rem !important;
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent !important;
-    }
-    .dark .aplayer {
-        background: transparent !important;
-        color: #f1f5f9 !important;
-    }
-    .dark .aplayer .aplayer-body,
-    .dark .aplayer .aplayer-list {
-        background: rgba(15, 23, 42, 0.6) !important;
-        color: #e2e8f0 !important;
-    }
-    .dark .aplayer .aplayer-list ol li {
-        border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-    }
-    .dark .aplayer .aplayer-list ol li:hover {
-        background: rgba(255, 255, 255, 0.08) !important;
-    }
-    .dark .aplayer .aplayer-list ol li.aplayer-list-light {
-        background: rgba(255, 255, 255, 0.12) !important;
-    }
-    .dark .aplayer .aplayer-info .aplayer-music .aplayer-title {
-        color: #f8fafc !important;
-    }
-    .dark .aplayer .aplayer-info .aplayer-music .aplayer-author {
-        color: #94a3b8 !important;
-    }
-    .dark .aplayer .aplayer-info .aplayer-controller .aplayer-time {
-        color: #94a3b8 !important;
-    }
 </style>
-
-<script>
-    function setupPlayerModes() {
-        const aplayerBtn = document.getElementById("mode-aplayer-btn");
-        const officialBtn = document.getElementById("mode-official-btn");
-        const aplayerWrapper = document.getElementById("aplayer-wrapper");
-        const officialWrapper = document.getElementById("official-wrapper");
-
-        aplayerBtn?.addEventListener("click", () => {
-            aplayerBtn.classList.add("bg-[var(--primary)]", "text-white", "shadow-sm");
-            aplayerBtn.classList.remove("text-neutral-500", "dark:text-neutral-400");
-            officialBtn?.classList.remove("bg-[var(--primary)]", "text-white", "shadow-sm");
-            officialBtn?.classList.add("text-neutral-500", "dark:text-neutral-400");
-
-            aplayerWrapper?.classList.remove("hidden");
-            officialWrapper?.classList.add("hidden");
-        });
-
-        officialBtn?.addEventListener("click", () => {
-            officialBtn.classList.add("bg-[var(--primary)]", "text-white", "shadow-sm");
-            officialBtn.classList.remove("text-neutral-500", "dark:text-neutral-400");
-            aplayerBtn?.classList.remove("bg-[var(--primary)]", "text-white", "shadow-sm");
-            aplayerBtn?.classList.add("text-neutral-500", "dark:text-neutral-400");
-
-            officialWrapper?.classList.remove("hidden");
-            aplayerWrapper?.classList.add("hidden");
-        });
-    }
-
-    setupPlayerModes();
-
-    // @ts-ignore
-    window.swup?.hooks?.on("page:view", () => {
-        setupPlayerModes();
-        // @ts-ignore
-        if (window.Meting) {
-            // @ts-ignore
-            window.Meting.init?.();
-        }
-    });
-</script>
