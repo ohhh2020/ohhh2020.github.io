@@ -133,7 +133,7 @@
             const h = window.innerHeight;
             if (w <= 0 || h <= 0) return;
 
-            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            dpr = Math.min(window.devicePixelRatio || 1, 1.25);
 
             const cellW = rippleCore.RIPPLE.cellWidth;
             const cellH = rippleCore.RIPPLE.cellHeight;
@@ -218,8 +218,8 @@
 
             // True 0fps idle sleep when mouse stops and wave energy settles
             const fieldBusy = typeof field.busy === "function" ? field.busy() : waves.active();
-            const auraRecent = auraState.active && (now - lastSkimAt < 1200);
-            const inIntro = !still && (now - mountedAt < 1600);
+            const auraRecent = auraState.active && (now - lastSkimAt < 750);
+            const inIntro = !still && (now - mountedAt < 1400);
 
             if (!still && (fieldBusy || auraRecent || inIntro)) {
                 rafId = requestAnimationFrame(loop);

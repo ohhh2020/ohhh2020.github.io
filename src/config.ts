@@ -43,8 +43,8 @@ export const navBarConfig: NavBarConfig = {
 			url: "/pictures/",
 		},
 		{
-			name: "音乐",
-			url: "/music/",
+			name: "学习统计",
+			url: "/study/",
 		},
 		LinkPreset.About,
 		{
@@ -53,13 +53,6 @@ export const navBarConfig: NavBarConfig = {
 			external: true, // Show an external link icon and will open in a new tab
 		},
 	],
-};
-
-export const musicConfig = {
-	enable: true,
-	// 主歌单 ID (用户的 6000+ 首红心曲库)
-	neteasePlaylistId: "2971528746",
-	server: "netease",
 };
 
 export const profileConfig: ProfileConfig = {

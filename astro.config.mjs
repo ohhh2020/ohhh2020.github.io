@@ -29,6 +29,9 @@ export default defineConfig({
 	site: "https://ohhh2020.github.io",
 	base: "/",
 	trailingSlash: "always",
+	redirects: {
+		"/music": "/study",
+	},
 	integrations: [
 		tailwind({
 			nesting: true,

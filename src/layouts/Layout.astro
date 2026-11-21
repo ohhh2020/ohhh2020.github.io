@@ -21,7 +21,6 @@ import { pathsEqual, url } from "../utils/url-utils";
 import "katex/dist/katex.css";
 import ScrollProgress from "../components/control/ScrollProgress.astro";
 import ParticleMesh from "../components/misc/ParticleMesh.astro";
-import MusicPlayer from "../components/control/MusicPlayer.astro";
 
 interface Props {
 	title?: string;
@@ -121,7 +120,7 @@ const bannerOffset =
 		/>
 
 		<!-- Obsidian Prism ASCII Matrix & Glyph Ripple Core Engine -->
-		<script is:inline src={url('/scripts/ripple-core.js')}></script>
+		<script is:inline defer src={url('/scripts/ripple-core.js')}></script>
 
 		<!-- Set the Obsidian Prism preset & theme before the page is rendered to avoid flash -->
 		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
@@ -181,7 +180,6 @@ const bannerOffset =
 		<ConfigCarrier></ConfigCarrier>
 		<ScrollProgress />
 		<ParticleMesh />
-		<MusicPlayer />
 		<slot />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
