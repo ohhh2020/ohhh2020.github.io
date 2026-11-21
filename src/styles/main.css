@@ -2,15 +2,20 @@
 
 @layer components {
     .card-base {
+        position: relative;
         border-radius: var(--radius-large);
         overflow: hidden;
-        background: var(--card-bg);
+        background-color: var(--card-bg);
+        background-image: var(--ag-cs-sheen);
+        backdrop-filter: blur(20px) saturate(135%);
+        -webkit-backdrop-filter: blur(20px) saturate(135%);
         border: 1px solid var(--card-border, rgba(255, 255, 255, 0.088));
         box-shadow: var(--elevation-1);
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
     }
     .card-base:hover {
         box-shadow: var(--elevation-2);
+        border-color: color-mix(in srgb, var(--primary) 28%, var(--card-border));
     }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
@@ -192,40 +197,193 @@
 }
 
 /* ==========================================================================
-   Obsidian Prism · Optical Specular Rim & Film Grain Overlay
+   Obsidian Prism · Core Optical Material Tokens & Gradient Sheens
    ========================================================================== */
 
-/* Authentic Gemini 4-Stop Spectral Rim (Pointer-Tracking Ready) */
-.ag-prism-rim {
+:root {
+    --ag-cs-sheen: linear-gradient(172deg, rgba(255, 255, 255, 0.046) 0%, rgba(160, 185, 245, 0.014) 36%, rgba(10, 11, 16, 0.2) 100%);
+    --ag-prism-cobalt: #4c8df6;
+    --ag-prism-iris: #9b72cb;
+    --ag-prism-coral: #d96570;
+    --ag-prism-amber: #f2b84b;
+    --ag-prism-strength: 1;
+    --ag-prism-light-mul: 1;
+}
+
+:root:not(.dark),
+:root[data-prism-preset="daylight-crystal"] {
+    --ag-cs-sheen: linear-gradient(176deg, rgba(255, 255, 255, 0.96) 0%, rgba(241, 246, 255, 0.55) 100%);
+}
+
+:root[data-prism-preset="warm-dark"] {
+    --ag-cs-sheen: linear-gradient(172deg, rgba(255, 248, 236, 0.042) 0%, rgba(217, 119, 87, 0.014) 38%, rgba(16, 15, 13, 0.2) 100%);
+    --ag-prism-cobalt: #F6BD60;
+    --ag-prism-iris: #F0A37E;
+    --ag-prism-coral: #D97757;
+    --ag-prism-amber: #E5A93B;
+}
+
+:root[data-prism-preset="warm-alabaster"] {
+    --ag-cs-sheen: linear-gradient(176deg, rgba(255, 255, 255, 0.97) 0%, rgba(250, 246, 238, 0.58) 100%);
+    --ag-prism-cobalt: #C25934;
+    --ag-prism-iris: #D97757;
+    --ag-prism-coral: #9A3412;
+    --ag-prism-amber: #D97706;
+}
+
+/* ==========================================================================
+   Obsidian Prism · Zero-StyleRecalc 300Hz Pointer-Tracking Spectral Rim
+   Directly ported from obsidian-prism/workbench/styles/v2-components.css & style.css
+   ========================================================================== */
+
+.ag-prism-rim,
+.card-base {
+    --px: -9999px;
+    --py: -9999px;
+    --prism-r: 240px;
+    --prism-tier-mul: 1;
+    --prism-core-alpha: 0.95;
     position: relative;
 }
-.ag-prism-rim::before {
+
+.ag-prism-rim::before,
+.card-base::before {
     content: "";
     position: absolute;
-    inset: -1px;
+    inset: 0;
     border-radius: inherit;
     padding: 1px;
     pointer-events: none;
-    z-index: 10;
-    opacity: 0;
+    z-index: 8;
+    opacity: calc(var(--ag-prism-strength, 1) * var(--prism-tier-mul, 1) * var(--prism-light-mul, 1));
     background: radial-gradient(
-        260px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(255, 255, 255, 0.96) 0%,
-        var(--ag-prism-cobalt, #4c8df6) 24%,
-        var(--ag-prism-iris, #9b72cb) 50%,
+        var(--prism-r, 240px) circle at var(--px, -9999px) var(--py, -9999px),
+        rgba(255, 255, 255, var(--prism-core-alpha, 0.95)) 0%,
+        var(--ag-prism-cobalt, #4c8df6) 22%,
+        var(--ag-prism-iris, #9b72cb) 48%,
         var(--ag-prism-coral, #d96570) 74%,
         var(--ag-prism-amber, #f2b84b) 92%,
         transparent 100%
     );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
     mask-composite: exclude;
-    transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 220ms ease;
 }
-.ag-prism-rim:hover::before,
-.ag-prism-rim:focus-within::before {
-    opacity: 1;
+
+/* Light mode palettes */
+:root:not(.dark) .ag-prism-rim::before,
+:root:not(.dark) .card-base::before,
+:root[data-prism-preset="daylight-crystal"] .ag-prism-rim::before,
+:root[data-prism-preset="daylight-crystal"] .card-base::before {
+    background: radial-gradient(
+        var(--prism-r, 240px) circle at var(--px, -9999px) var(--py, -9999px),
+        var(--ag-prism-cobalt, #2563EB) 0%,
+        var(--ag-prism-iris, #7C3AED) 32%,
+        var(--ag-prism-coral, #EA4335) 64%,
+        var(--ag-prism-amber, #D97706) 88%,
+        transparent 100%
+    );
+}
+
+:root[data-prism-preset="warm-dark"] .ag-prism-rim::before,
+:root[data-prism-preset="warm-dark"] .card-base::before {
+    background: radial-gradient(
+        var(--prism-r, 240px) circle at var(--px, -9999px) var(--py, -9999px),
+        rgba(255, 246, 238, 0.95) 0%,
+        #F6BD60 26%,
+        #F0A37E 54%,
+        #D97757 82%,
+        transparent 100%
+    );
+}
+
+:root[data-prism-preset="warm-alabaster"] .ag-prism-rim::before,
+:root[data-prism-preset="warm-alabaster"] .card-base::before {
+    background: radial-gradient(
+        var(--prism-r, 240px) circle at var(--px, -9999px) var(--py, -9999px),
+        #9A3412 0%,
+        #C25934 34%,
+        #D97757 68%,
+        #D97706 90%,
+        transparent 100%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ag-prism-rim::before,
+    .card-base::before {
+        background: linear-gradient(135deg, rgba(76, 141, 246, 0.45), rgba(155, 114, 203, 0.35), rgba(217, 101, 112, 0.25), transparent 65%);
+    }
+}
+
+/* ==========================================================================
+   Obsidian Prism · Pill Groups & Specular Buttons (workbench-shell.css)
+   ========================================================================== */
+
+.wb-pill-group {
+    position: relative;
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+    gap: 3px;
+}
+:root:not(.dark) .wb-pill-group {
+    background: rgba(28, 30, 40, 0.035);
+    border-color: rgba(28, 30, 40, 0.09);
+}
+
+.wb-pill-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--secondary-foreground, #8f8f9c);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 120ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.wb-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.075);
+    color: var(--foreground, #f2f2f5);
+}
+.wb-pill-btn:active {
+    transform: scale(0.96);
+}
+.wb-pill-btn[data-active="true"],
+.wb-pill-btn.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--foreground, #f2f2f5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+:root:not(.dark) .wb-pill-btn {
+    color: #5b6b82;
+}
+:root:not(.dark) .wb-pill-btn:hover {
+    background: rgba(28, 30, 40, 0.065);
+    color: #16161a;
+}
+:root:not(.dark) .wb-pill-btn[data-active="true"],
+:root:not(.dark) .wb-pill-btn.active {
+    background: #ffffff;
+    color: #16161a;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 0 0 0.5px rgba(28, 30, 40, 0.08), 0 1px 2px rgba(28, 30, 40, 0.08);
 }
 
 /* 2.2% Film Grain Noise Texture */
@@ -238,10 +396,35 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Ambient Optical Aura */
+.prism-ambient-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, var(--primary-soft) 0%, transparent 68%);
+    opacity: 0.55;
+    transition: opacity 0.3s ease;
+}
+
 /* Banner Blending Overlay */
 .prism-banner-overlay {
-    background: linear-gradient(180deg, rgba(14, 14, 17, 0.02) 0%, rgba(14, 14, 17, 0.3) 55%, var(--page-bg) 100%);
+    background: linear-gradient(180deg, rgba(14, 14, 17, 0.05) 0%, rgba(14, 14, 17, 0.35) 60%, var(--page-bg) 100%);
 }
 :root:not(.dark) .prism-banner-overlay {
-    background: linear-gradient(180deg, rgba(244, 247, 251, 0.02) 0%, rgba(244, 247, 251, 0.25) 55%, var(--page-bg) 100%);
+    background: linear-gradient(180deg, rgba(244, 247, 251, 0.05) 0%, rgba(244, 247, 251, 0.3) 60%, var(--page-bg) 100%);
+}
+:root[data-prism-preset="warm-dark"] .prism-banner-overlay {
+    background: linear-gradient(180deg, rgba(20, 20, 19, 0.05) 0%, rgba(20, 20, 19, 0.35) 60%, var(--page-bg) 100%);
+}
+:root[data-prism-preset="warm-alabaster"] .prism-banner-overlay {
+    background: linear-gradient(180deg, rgba(246, 244, 238, 0.05) 0%, rgba(246, 244, 238, 0.3) 60%, var(--page-bg) 100%);
+}
+
+/* Sunken Console Well Codeblock Styling */
+pre {
+    background-color: var(--codeblock-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: var(--radius-medium) !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
 }

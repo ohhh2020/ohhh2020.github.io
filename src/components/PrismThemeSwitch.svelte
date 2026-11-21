@@ -158,21 +158,21 @@ $: activePresetInfo = PRESETS.find((p) => p.id === currentPreset) || PRESETS[0];
     <button
         aria-label="切换黑曜棱镜光学主题"
         title="黑曜棱镜预设: {activePresetInfo.name}"
-        class="relative btn-plain scale-animation rounded-lg h-11 w-11 flex items-center justify-center active:scale-90 transition-all"
+        class="relative wb-pill-btn !p-0 rounded-full h-9 w-9 flex items-center justify-center active:scale-90 border border-[var(--card-border)] bg-black/[0.035] dark:bg-white/[0.045] transition-all"
         onclick={togglePanel}
     >
         <!-- Gemini 4-Point Prism Star -->
-        <svg class="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="w-4 h-4 transition-transform duration-300 hover:rotate-45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M12 1.5C12.25 1.5 12.47 1.67 12.53 1.91C12.74 2.7 13.01 3.47 13.33 4.22C14.56 7.08 16.72 9.24 19.58 10.47C20.33 10.79 21.1 11.06 21.89 11.27C22.13 11.33 22.3 11.55 22.3 11.8C22.3 12.05 22.13 12.27 21.89 12.33C21.1 12.54 20.33 12.81 19.58 13.13C16.72 14.36 14.56 16.52 13.33 19.38C13.01 20.13 12.74 20.9 12.53 21.69C12.47 21.93 12.25 22.1 12 22.1C11.75 22.1 11.53 21.93 11.47 21.69C11.26 20.9 10.99 20.13 10.67 19.38C9.44 16.52 7.28 14.36 4.42 13.13C3.67 12.81 2.9 12.54 2.11 12.33C1.87 12.27 1.7 12.05 1.7 11.8C1.7 11.55 1.87 11.33 2.11 11.27C2.9 11.06 3.67 10.79 4.42 10.47C7.28 9.24 9.44 7.08 10.67 4.22C10.99 3.47 11.26 2.7 11.47 1.91C11.53 1.67 11.75 1.5 12 1.5Z"
                 fill="currentColor"
-                opacity="0.88"
+                opacity="0.9"
             />
         </svg>
 
         <!-- Active Optical Dot Indicator -->
         <span
-            class="absolute bottom-2 right-2 w-2 h-2 rounded-full transition-all duration-300 shadow-sm"
+            class="absolute bottom-1.5 right-1.5 w-2 h-2 rounded-full transition-all duration-300 shadow-sm"
             style="background-color: {activePresetInfo.accent}; box-shadow: 0 0 6px {activePresetInfo.accent};"
         ></span>
     </button>
@@ -185,7 +185,7 @@ $: activePresetInfo = PRESETS.find((p) => p.id === currentPreset) || PRESETS[0];
         class:pointer-events-none={!isPanelOpen}
         class:-translate-y-2={!isPanelOpen}
     >
-        <div class="card-base float-panel !top-0 p-3 w-72 shadow-2xl border border-[var(--card-border)]">
+        <div class="card-base ag-prism-rim float-panel !top-0 p-3 w-72 shadow-2xl border border-[var(--card-border)]">
             <!-- Header -->
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-[var(--line-divider)]">
                 <div class="flex items-center gap-2">

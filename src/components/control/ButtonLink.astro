@@ -6,34 +6,32 @@ interface Props {
 }
 const { badge, url, label } = Astro.props;
 ---
-<a href={url} aria-label={label}>
+<a href={url} aria-label={label} class="block group/link">
     <button
         class:list={`
             w-full
-            h-10
-            rounded-lg
-            bg-none
+            h-9
+            rounded-xl
+            bg-transparent
             hover:bg-[var(--btn-plain-bg-hover)]
-            active:bg-[var(--btn-plain-bg-active)]
+            active:scale-[0.98]
             transition-all
-            pl-2
-            hover:pl-3
-            
-            text-neutral-700
-            hover:text-[var(--primary)]
-            dark:text-neutral-300
-            dark:hover:text-[var(--primary)]
+            px-2.5
+            text-sm
+            font-medium
+            text-[var(--secondary-foreground)]
+            group-hover/link:text-[var(--primary)]
         `
         }
     >
-        <div class="flex items-center justify-between relative mr-2">
-            <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis  ">
+        <div class="flex items-center justify-between relative">
+            <div class="overflow-hidden text-left whitespace-nowrap overflow-ellipsis">
                 <slot></slot>
             </div>
             { badge !== undefined && badge !== null && badge !== '' &&
-                <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
-                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
-                    bg-[var(--btn-regular-bg)] dark:bg-[var(--primary)]
+                <div class="transition px-2.5 h-5.5 min-w-[1.75rem] rounded-full text-xs font-mono tabular-nums font-medium
+                    text-[var(--muted-foreground)] group-hover/link:text-[var(--primary)]
+                    bg-black/[0.04] dark:bg-white/[0.05] border border-[var(--card-border)]
                     flex items-center justify-center">
                     { badge }
                 </div>

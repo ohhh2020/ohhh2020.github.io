@@ -174,6 +174,7 @@ const bannerOffset =
 		  data-overlayscrollbars-initialize
 	>
 		<div class="prism-film-grain" aria-hidden="true"></div>
+		<div class="prism-ambient-glow" aria-hidden="true"></div>
 		<ConfigCarrier></ConfigCarrier>
 		<ScrollProgress />
 		<ParticleMesh />
@@ -591,10 +592,86 @@ if (window.swup) {
 	document.addEventListener("swup:enable", setup)
 }
 
-// 3D 卡片微倾斜与探照灯反射光斑
+// ============================================================================
+// Obsidian Prism Zero-StyleRecalc 300Hz Pointer-Tracking Spectral Rim Engine
+// Directly ported from obsidian-prism/workbench/app.js (lines 1899-1965)
+// ============================================================================
+let lastPointerPos = { x: -9999, y: -9999 };
+let prismDirty = false;
+let prismRafId = 0;
+
+function updatePrismCoordinates() {
+	prismRafId = 0;
+	prismDirty = false;
+	const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const { x, y } = lastPointerPos;
+
+	if (!reduceMotion) {
+		const rims = document.querySelectorAll<HTMLElement>('.ag-prism-rim, .card-base');
+		rims.forEach((el) => {
+			if (x < -1000) {
+				el.style.setProperty('--px', '-9999px');
+				el.style.setProperty('--py', '-9999px');
+				return;
+			}
+			const rect = el.getBoundingClientRect();
+			const maxRange = 280; // halo sensitivity distance around card
+			if (
+				x < rect.left - maxRange ||
+				x > rect.right + maxRange ||
+				y < rect.top - maxRange ||
+				y > rect.bottom + maxRange
+			) {
+				el.style.setProperty('--px', '-9999px');
+				el.style.setProperty('--py', '-9999px');
+				return;
+			}
+			el.style.setProperty('--px', `${Math.round(x - rect.left)}px`);
+			el.style.setProperty('--py', `${Math.round(y - rect.top)}px`);
+		});
+	}
+}
+
+function schedulePrismUpdate(clientX: number, clientY: number) {
+	lastPointerPos.x = clientX;
+	lastPointerPos.y = clientY;
+	if (!prismDirty) {
+		prismDirty = true;
+		prismRafId = requestAnimationFrame(updatePrismCoordinates);
+	}
+}
+
+window.addEventListener('pointermove', (e) => {
+	schedulePrismUpdate(e.clientX, e.clientY);
+}, { passive: true });
+
+window.addEventListener('pointerleave', () => {
+	schedulePrismUpdate(-9999, -9999);
+});
+
+window.addEventListener('mouseout', (e) => {
+	if (!e.relatedTarget && !(e as any).toElement) {
+		schedulePrismUpdate(-9999, -9999);
+	}
+});
+
+window.addEventListener('scroll', () => {
+	if (lastPointerPos.x > -1000) {
+		schedulePrismUpdate(lastPointerPos.x, lastPointerPos.y);
+	}
+}, { passive: true });
+
+// @ts-ignore
+window.swup?.hooks?.on('page:view', () => {
+	if (lastPointerPos.x > -1000) {
+		schedulePrismUpdate(lastPointerPos.x, lastPointerPos.y);
+	}
+});
+
+// 3D 卡片微倾斜交互
 function initCardTilt() {
 	const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-	if (isTouchDevice) return; // 移动端不执行倾斜
+	if (isTouchDevice) return;
 
 	const cards = document.querySelectorAll<HTMLElement>(".card-base");
 	cards.forEach((card) => {
@@ -608,16 +685,14 @@ function initCardTilt() {
 
 			const xPercent = x / rect.width;
 			const yPercent = y / rect.height;
-			const rotateX = (0.5 - yPercent) * 3;
-			const rotateY = (xPercent - 0.5) * 3;
+			const rotateX = (0.5 - yPercent) * 2.5;
+			const rotateY = (xPercent - 0.5) * 2.5;
 
-			card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-			card.style.setProperty("--mouse-x", `${x}px`);
-			card.style.setProperty("--mouse-y", `${y}px`);
+			card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
 		});
 
 		card.addEventListener("mouseleave", () => {
-			card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+			card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)";
 		});
 	});
 }
