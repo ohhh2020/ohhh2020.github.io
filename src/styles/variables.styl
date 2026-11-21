@@ -1,98 +1,314 @@
-/* utils */
-white(a)
-  rgba(255, 255, 255, a)
+/* ==========================================================================
+   Obsidian Prism Design Tokens & Optical Palettes for Fuwari Astro Blog
+   Flagship 4-Preset System:
+   1. 深空黑曜 (obsidian-dark) - 冷调钛黑 · 旗舰高对比
+   2. 暖炭玄岩 (warm-dark)     - 玄武岩炭 · 夜间柔和
+   3. 白昼冷晶 (daylight-crystal) - 高明度冰蓝 · 现代明色
+   4. 暖白画册 (warm-alabaster)   - 纸墨暖白 · 印刷品书卷
+   ========================================================================== */
 
-black(a)
-  rgba(0, 0, 0, a)
-
-rainbow-light = linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30), oklch(0.80 0.10 60), oklch(0.80 0.10 90), oklch(0.80 0.10 120), oklch(0.80 0.10 150), oklch(0.80 0.10 180), oklch(0.80 0.10 210), oklch(0.80 0.10 240), oklch(0.80 0.10 270), oklch(0.80 0.10 300), oklch(0.80 0.10 330), oklch(0.80 0.10 360))
-rainbow-dark = linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360))
-
+/* Concentric micro-bevel radius & timing */
 :root
-  --radius-large 1rem
+  --radius-large 0.5rem
+  --radius-medium 0.375rem
+  --radius-small 0.25rem
   --content-delay 150ms
+  --toc-width calc((100vw - var(--page-width)) / 2 - 1rem)
+  --ag-prism-cobalt #4c8df6
+  --ag-prism-iris #9b72cb
+  --ag-prism-coral #d96570
+  --ag-prism-amber #f2b84b
 
-/* An util to define variables that vary with light and dark mode */
-define(vars)
-  :root
-    for key, value in vars
-      {key}: value[0]
-  :root.dark
-    for key, value in vars
-      if length(value) > 1
-        {key}: value[1]
+/* ── 1. 深空黑曜 (Obsidian Dark · 默认暗色旗舰) ─────────────────────── */
+:root[data-prism-preset="obsidian-dark"],
+:root.dark:not([data-prism-preset]),
+:root[data-prism-preset="obsidian-dark"].dark
+  color-scheme dark
+  --page-bg #0E0E11
+  --card-bg #141418
+  --card-border rgba(255, 255, 255, 0.088)
+  --float-panel-bg rgba(20, 21, 26, 0.95)
 
-define({
-  --primary: oklch(0.70 0.14 var(--hue)) oklch(0.75 0.14 var(--hue))
-  --page-bg: oklch(0.95 0.01 var(--hue)) oklch(0.16 0.014 var(--hue))
-  --card-bg: white oklch(0.23 0.015 var(--hue))
+  --foreground #F2F2F5
+  --secondary-foreground #C4C4CE
+  --muted-foreground #8A8A98
+  --deep-text #F2F2F5
 
-  --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))
+  --primary #669DF6
+  --primary-soft rgba(102, 157, 246, 0.14)
+  --primary-border rgba(102, 157, 246, 0.38)
+  --link #8AB4F8
+  --link-underline rgba(102, 157, 246, 0.35)
+  --link-hover #8AB4F8
+  --link-active #669DF6
+  --title-active #8AB4F8
 
-  --btn-regular-bg: oklch(0.95 0.025 var(--hue)) oklch(0.33 0.035 var(--hue))
-  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue)) oklch(0.38 0.04 var(--hue))
-  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue)) oklch(0.43 0.045 var(--hue))
+  --btn-content #669DF6
+  --btn-regular-bg rgba(255, 255, 255, 0.06)
+  --btn-regular-bg-hover rgba(255, 255, 255, 0.10)
+  --btn-regular-bg-active rgba(255, 255, 255, 0.14)
 
-  --btn-plain-bg-hover: oklch(0.95 0.025 var(--hue)) oklch(0.30 0.035 var(--hue))
-  --btn-plain-bg-active: oklch(0.98 0.01 var(--hue)) oklch(0.27 0.025 var(--hue))
+  --btn-plain-bg-hover rgba(255, 255, 255, 0.055)
+  --btn-plain-bg-active rgba(255, 255, 255, 0.095)
 
-  --btn-card-bg-hover: oklch(0.98 0.005 var(--hue)) oklch(0.3 0.03 var(--hue))
-  --btn-card-bg-active: oklch(0.9 0.03 var(--hue)) oklch(0.35 0.035 var(--hue))
+  --btn-card-bg-hover rgba(255, 255, 255, 0.04)
+  --btn-card-bg-active rgba(255, 255, 255, 0.08)
 
-  --enter-btn-bg: var(--btn-regular-bg)
-  --enter-btn-bg-hover: var(--btn-regular-bg-hover)
-  --enter-btn-bg-active: var(--btn-regular-bg-active)
+  --enter-btn-bg var(--btn-regular-bg)
+  --enter-btn-bg-hover var(--btn-regular-bg-hover)
+  --enter-btn-bg-active var(--btn-regular-bg-active)
 
-  --deep-text: oklch(0.25 0.02 var(--hue))
+  --line-divider rgba(255, 255, 255, 0.08)
+  --line-color rgba(255, 255, 255, 0.1)
+  --meta-divider rgba(255, 255, 255, 0.2)
 
-  --title-active: oklch(0.6 0.1 var(--hue))
+  --inline-code-bg rgba(255, 255, 255, 0.06)
+  --inline-code-color #8AB4F8
+  --selection-bg rgba(102, 157, 246, 0.32)
+  --codeblock-selection rgba(102, 157, 246, 0.35)
+  --codeblock-bg #09090B
+  --codeblock-topbar-bg rgba(255, 255, 255, 0.03)
+  --license-block-bg #09090B
 
-  --line-divider: black(0.08) white(0.08)
+  --specular-color rgba(255, 255, 255, 0.095)
+  --elevation-1 inset 0 1px 0 rgba(255, 255, 255, 0.095), 0 0 0 0.5px rgba(0, 0, 0, 0.42), 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 20px -6px rgba(0, 0, 0, 0.45)
+  --elevation-2 inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 0.5px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.35), 0 14px 28px -6px rgba(0, 0, 0, 0.55)
 
-  --line-color: black(0.1) white(0.1)
-  --meta-divider: black(0.2) white(0.2)
+  --scrollbar-bg rgba(255, 255, 255, 0.18)
+  --scrollbar-bg-hover rgba(255, 255, 255, 0.32)
+  --scrollbar-bg-active rgba(255, 255, 255, 0.45)
 
-  --inline-code-bg: var(--btn-regular-bg)
-  --inline-code-color: var(--btn-content)
-  --selection-bg: oklch(0.90 0.05 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --codeblock-selection: oklch(0.40 0.08 var(--hue))
-  --codeblock-bg: oklch(0.17 0.015 var(--hue)) oklch(0.17 0.015 var(--hue))
-  --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue)) oklch(0.12 0.015 var(--hue))
+  --color-selection-bar linear-gradient(to right, #4285F4, #9B72CB, #EA4335, #FBBC04)
+  --display-light-icon 0
+  --display-dark-icon 1
 
-  --license-block-bg: black(0.03) var(--codeblock-bg)
+  --admonitions-color-note #669DF6
+  --admonitions-color-tip #50A37B
+  --admonitions-color-important #9B72CB
+  --admonitions-color-warning #F2B84B
+  --admonitions-color-caution #E5534B
 
-  --link-underline: oklch(0.93 0.04 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --link-hover: oklch(0.95 0.025 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --link-active: oklch(0.90 0.05 var(--hue)) oklch(0.35 0.07 var(--hue))
+  --toc-badge-bg rgba(102, 157, 246, 0.15)
+  --toc-btn-hover rgba(255, 255, 255, 0.055)
+  --toc-btn-active rgba(255, 255, 255, 0.095)
+  --toc-item-active #669DF6
 
-  --float-panel-bg: white oklch(0.19 0.015 var(--hue))
+/* ── 2. 暖炭玄岩 (Warm Dark · 护眼夜间微暖) ────────────────────────── */
+:root[data-prism-preset="warm-dark"],
+:root[data-prism-preset="warm-dark"].dark
+  color-scheme dark
+  --page-bg #141413
+  --card-bg #1B1A18
+  --card-border rgba(245, 240, 230, 0.10)
+  --float-panel-bg rgba(27, 26, 24, 0.95)
 
-  --scrollbar-bg-light: black(0.4)
-  --scrollbar-bg-hover-light: black(0.5)
-  --scrollbar-bg-active-light: black(0.6)
+  --foreground #F2EFE9
+  --secondary-foreground #CEC8BC
+  --muted-foreground #A39E93
+  --deep-text #F2EFE9
 
-  --scrollbar-bg-dark: white(0.4)
-  --scrollbar-bg-hover-dark: white(0.5)
-  --scrollbar-bg-active-dark: white(0.6)
+  --primary #D97757
+  --primary-soft rgba(217, 119, 87, 0.14)
+  --primary-border rgba(217, 119, 87, 0.38)
+  --link #E59377
+  --link-underline rgba(217, 119, 87, 0.35)
+  --link-hover #E59377
+  --link-active #D97757
+  --title-active #E59377
 
-  --scrollbar-bg: var(--scrollbar-bg-light) var(--scrollbar-bg-dark)
-  --scrollbar-bg-hover: var(--scrollbar-bg-hover-light) var(--scrollbar-bg-hover-dark)
-  --scrollbar-bg-active: var(--scrollbar-bg-active-light) var(--scrollbar-bg-active-dark)
+  --btn-content #D97757
+  --btn-regular-bg rgba(245, 240, 230, 0.065)
+  --btn-regular-bg-hover rgba(245, 240, 230, 0.11)
+  --btn-regular-bg-active rgba(245, 240, 230, 0.15)
 
-  --color-selection-bar: rainbow-light rainbow-dark
+  --btn-plain-bg-hover rgba(245, 240, 230, 0.055)
+  --btn-plain-bg-active rgba(245, 240, 230, 0.095)
 
-  --display-light-icon: 1 0
-  --display-dark-icon: 0 1
+  --btn-card-bg-hover rgba(245, 240, 230, 0.04)
+  --btn-card-bg-active rgba(245, 240, 230, 0.08)
 
-  --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180)
-  --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250)
-  --admonitions-color-important: oklch(0.7 0.14 310) oklch(0.75 0.14 310)
-  --admonitions-color-warning: oklch(0.7 0.14 60) oklch(0.75 0.14 60)
-  --admonitions-color-caution: oklch(0.6 0.2 25) oklch(0.65 0.2 25)
+  --enter-btn-bg var(--btn-regular-bg)
+  --enter-btn-bg-hover var(--btn-regular-bg-hover)
+  --enter-btn-bg-active var(--btn-regular-bg-active)
 
-  --toc-badge-bg: oklch(0.89 0.050 var(--hue)) var(--btn-regular-bg)
-  --toc-btn-hover: oklch(0.926 0.015 var(--hue)) oklch(0.22 0.02 var(--hue))
-  --toc-btn-active: oklch(0.90 0.015 var(--hue)) oklch(0.25 0.02 var(--hue))
-  --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
-  --toc-item-active: oklch(0.70 0.13 var(--hue)) oklch(0.35 0.07 var(--hue))
-})
+  --line-divider rgba(245, 240, 230, 0.08)
+  --line-color rgba(245, 240, 230, 0.1)
+  --meta-divider rgba(245, 240, 230, 0.2)
+
+  --inline-code-bg rgba(245, 240, 230, 0.065)
+  --inline-code-color #E59377
+  --selection-bg rgba(217, 119, 87, 0.32)
+  --codeblock-selection rgba(217, 119, 87, 0.35)
+  --codeblock-bg #0F0E0D
+  --codeblock-topbar-bg rgba(245, 240, 230, 0.03)
+  --license-block-bg #0F0E0D
+
+  --specular-color rgba(255, 248, 236, 0.08)
+  --elevation-1 inset 0 1px 0 rgba(255, 248, 236, 0.08), 0 0 0 0.5px rgba(0, 0, 0, 0.46), 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 20px -6px rgba(0, 0, 0, 0.45)
+  --elevation-2 inset 0 1px 0 rgba(255, 248, 236, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.52), 0 4px 8px rgba(0, 0, 0, 0.35), 0 14px 28px -6px rgba(0, 0, 0, 0.55)
+
+  --scrollbar-bg rgba(245, 240, 230, 0.18)
+  --scrollbar-bg-hover rgba(245, 240, 230, 0.32)
+  --scrollbar-bg-active rgba(245, 240, 230, 0.45)
+
+  --color-selection-bar linear-gradient(to right, #D97757, #E5A93B, #56A87E, #D97757)
+  --display-light-icon 0
+  --display-dark-icon 1
+
+  --admonitions-color-note #D97757
+  --admonitions-color-tip #56A87E
+  --admonitions-color-important #A882DD
+  --admonitions-color-warning #E5A93B
+  --admonitions-color-caution #E5534B
+
+  --toc-badge-bg rgba(217, 119, 87, 0.15)
+  --toc-btn-hover rgba(245, 240, 230, 0.055)
+  --toc-btn-active rgba(245, 240, 230, 0.095)
+  --toc-item-active #D97757
+
+/* ── 3. 白昼冷晶 (Daylight Crystal · 默认亮色预设) ───────────────────── */
+:root[data-prism-preset="daylight-crystal"],
+:root:not(.dark):not([data-prism-preset]),
+:root[data-prism-preset="daylight-crystal"]:not(.dark)
+  color-scheme light
+  --page-bg #F4F7FB
+  --card-bg #FFFFFF
+  --card-border rgba(15, 23, 42, 0.09)
+  --float-panel-bg rgba(255, 255, 255, 0.96)
+
+  --foreground #0F172A
+  --secondary-foreground #334155
+  --muted-foreground #5B6B82
+  --deep-text #0F172A
+
+  --primary #2563EB
+  --primary-soft rgba(37, 99, 235, 0.11)
+  --primary-border rgba(37, 99, 235, 0.32)
+  --link #1D4ED8
+  --link-underline rgba(37, 99, 235, 0.28)
+  --link-hover #1D4ED8
+  --link-active #2563EB
+  --title-active #1D4ED8
+
+  --btn-content #2563EB
+  --btn-regular-bg rgba(15, 23, 42, 0.045)
+  --btn-regular-bg-hover rgba(15, 23, 42, 0.085)
+  --btn-regular-bg-active rgba(15, 23, 42, 0.125)
+
+  --btn-plain-bg-hover rgba(15, 23, 42, 0.05)
+  --btn-plain-bg-active rgba(37, 99, 235, 0.085)
+
+  --btn-card-bg-hover rgba(15, 23, 42, 0.025)
+  --btn-card-bg-active rgba(15, 23, 42, 0.055)
+
+  --enter-btn-bg var(--btn-regular-bg)
+  --enter-btn-bg-hover var(--btn-regular-bg-hover)
+  --enter-btn-bg-active var(--btn-regular-bg-active)
+
+  --line-divider rgba(15, 23, 42, 0.08)
+  --line-color rgba(15, 23, 42, 0.1)
+  --meta-divider rgba(15, 23, 42, 0.15)
+
+  --inline-code-bg rgba(15, 23, 42, 0.05)
+  --inline-code-color #1D4ED8
+  --selection-bg rgba(37, 99, 235, 0.2)
+  --codeblock-selection rgba(37, 99, 235, 0.25)
+  --codeblock-bg #EDF2F9
+  --codeblock-topbar-bg rgba(15, 23, 42, 0.035)
+  --license-block-bg rgba(15, 23, 42, 0.03)
+
+  --specular-color rgba(255, 255, 255, 0.95)
+  --elevation-1 inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 20px -6px rgba(30, 58, 138, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06)
+  --elevation-2 inset 0 1px 0 rgba(255, 255, 255, 0.98), 0 3px 6px rgba(15, 23, 42, 0.08), 0 14px 28px -6px rgba(30, 58, 138, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.08)
+
+  --scrollbar-bg rgba(15, 23, 42, 0.2)
+  --scrollbar-bg-hover rgba(15, 23, 42, 0.35)
+  --scrollbar-bg-active rgba(15, 23, 42, 0.5)
+
+  --color-selection-bar linear-gradient(to right, #2563EB, #0284C7, #059669, #D97706)
+  --display-light-icon 1
+  --display-dark-icon 0
+
+  --admonitions-color-note #2563EB
+  --admonitions-color-tip #168055
+  --admonitions-color-important #7C3AED
+  --admonitions-color-warning #D97706
+  --admonitions-color-caution #DC2626
+
+  --toc-badge-bg rgba(37, 99, 235, 0.10)
+  --toc-btn-hover rgba(15, 23, 42, 0.045)
+  --toc-btn-active rgba(37, 99, 235, 0.08)
+  --toc-item-active #2563EB
+
+/* ── 4. 暖白画册 (Warm Alabaster · 书卷暖白印刷质感) ─────────────────── */
+:root[data-prism-preset="warm-alabaster"],
+:root[data-prism-preset="warm-alabaster"]:not(.dark)
+  color-scheme light
+  --page-bg #F6F4EE
+  --card-bg #FFFFFF
+  --card-border rgba(42, 32, 20, 0.095)
+  --float-panel-bg rgba(255, 255, 255, 0.96)
+
+  --foreground #1C1814
+  --secondary-foreground #3F3830
+  --muted-foreground #6B6257
+  --deep-text #1C1814
+
+  --primary #C25934
+  --primary-soft rgba(194, 89, 52, 0.11)
+  --primary-border rgba(194, 89, 52, 0.32)
+  --link #B54D28
+  --link-underline rgba(194, 89, 52, 0.28)
+  --link-hover #B54D28
+  --link-active #C25934
+  --title-active #B54D28
+
+  --btn-content #C25934
+  --btn-regular-bg rgba(42, 32, 20, 0.045)
+  --btn-regular-bg-hover rgba(42, 32, 20, 0.085)
+  --btn-regular-bg-active rgba(42, 32, 20, 0.125)
+
+  --btn-plain-bg-hover rgba(42, 32, 20, 0.05)
+  --btn-plain-bg-active rgba(194, 89, 52, 0.085)
+
+  --btn-card-bg-hover rgba(42, 32, 20, 0.025)
+  --btn-card-bg-active rgba(42, 32, 20, 0.055)
+
+  --enter-btn-bg var(--btn-regular-bg)
+  --enter-btn-bg-hover var(--btn-regular-bg-hover)
+  --enter-btn-bg-active var(--btn-regular-bg-active)
+
+  --line-divider rgba(42, 32, 20, 0.08)
+  --line-color rgba(42, 32, 20, 0.1)
+  --meta-divider rgba(42, 32, 20, 0.15)
+
+  --inline-code-bg rgba(42, 32, 20, 0.05)
+  --inline-code-color #B54D28
+  --selection-bg rgba(194, 89, 52, 0.2)
+  --codeblock-selection rgba(194, 89, 52, 0.25)
+  --codeblock-bg #EFECE3
+  --codeblock-topbar-bg rgba(42, 32, 20, 0.035)
+  --license-block-bg rgba(42, 32, 20, 0.03)
+
+  --specular-color rgba(255, 255, 255, 0.95)
+  --elevation-1 inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 3px rgba(42, 32, 20, 0.06), 0 8px 20px -6px rgba(68, 52, 32, 0.08), 0 0 0 1px rgba(42, 32, 20, 0.065)
+  --elevation-2 inset 0 1px 0 rgba(255, 255, 255, 0.98), 0 3px 6px rgba(42, 32, 20, 0.08), 0 14px 28px -6px rgba(68, 52, 32, 0.12), 0 0 0 1px rgba(42, 32, 20, 0.08)
+
+  --scrollbar-bg rgba(42, 32, 20, 0.2)
+  --scrollbar-bg-hover rgba(42, 32, 20, 0.35)
+  --scrollbar-bg-active rgba(42, 32, 20, 0.5)
+
+  --color-selection-bar linear-gradient(to right, #C25934, #EA580C, #D97706, #15803D)
+  --display-light-icon 1
+  --display-dark-icon 0
+
+  --admonitions-color-note #C25934
+  --admonitions-color-tip #15803D
+  --admonitions-color-important #9A3412
+  --admonitions-color-warning #D97706
+  --admonitions-color-caution #DC2626
+
+  --toc-badge-bg rgba(194, 89, 52, 0.10)
+  --toc-btn-hover rgba(42, 32, 20, 0.045)
+  --toc-btn-active rgba(194, 89, 52, 0.08)
+  --toc-item-active #C25934

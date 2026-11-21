@@ -7,6 +7,15 @@ import {
 import { expressiveCodeConfig } from "@/config";
 import type { LIGHT_DARK_MODE } from "@/types/config";
 
+export const PRISM_PRESETS = [
+	"obsidian-dark",
+	"warm-dark",
+	"daylight-crystal",
+	"warm-alabaster",
+] as const;
+
+export type PrismPreset = (typeof PRISM_PRESETS)[number];
+
 export function getDefaultHue(): number {
 	const fallback = "250";
 	const configCarrier = document.getElementById("config-carrier");
@@ -27,21 +36,62 @@ export function setHue(hue: number): void {
 	r.style.setProperty("--hue", String(hue));
 }
 
+export function getStoredPrismPreset(): PrismPreset {
+	const stored = localStorage.getItem("prism-preset") as PrismPreset;
+	if (stored && PRISM_PRESETS.includes(stored)) {
+		return stored;
+	}
+	const storedTheme = localStorage.getItem("theme");
+	if (storedTheme === "light") return "daylight-crystal";
+	return "obsidian-dark";
+}
+
+export function setPrismPreset(preset: PrismPreset): void {
+	localStorage.setItem("prism-preset", preset);
+	const isDark = preset === "obsidian-dark" || preset === "warm-dark";
+	localStorage.setItem("theme", isDark ? "dark" : "light");
+
+	const root = document.documentElement;
+	root.setAttribute("data-prism-preset", preset);
+	if (isDark) {
+		root.classList.add("dark");
+	} else {
+		root.classList.remove("dark");
+	}
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
+	const currentPreset = getStoredPrismPreset();
+	const root = document.documentElement;
+
 	switch (theme) {
 		case LIGHT_MODE:
-			document.documentElement.classList.remove("dark");
-			break;
-		case DARK_MODE:
-			document.documentElement.classList.add("dark");
-			break;
-		case AUTO_MODE:
-			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-				document.documentElement.classList.add("dark");
+			root.classList.remove("dark");
+			if (currentPreset === "obsidian-dark" || currentPreset === "warm-dark") {
+				root.setAttribute("data-prism-preset", "daylight-crystal");
 			} else {
-				document.documentElement.classList.remove("dark");
+				root.setAttribute("data-prism-preset", currentPreset);
 			}
 			break;
+		case DARK_MODE:
+			root.classList.add("dark");
+			if (currentPreset === "daylight-crystal" || currentPreset === "warm-alabaster") {
+				root.setAttribute("data-prism-preset", "obsidian-dark");
+			} else {
+				root.setAttribute("data-prism-preset", currentPreset);
+			}
+			break;
+		case AUTO_MODE: {
+			const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+			if (isDark) {
+				root.classList.add("dark");
+				root.setAttribute("data-prism-preset", "obsidian-dark");
+			} else {
+				root.classList.remove("dark");
+				root.setAttribute("data-prism-preset", "daylight-crystal");
+			}
+			break;
+		}
 	}
 
 	// Set the theme for Expressive Code

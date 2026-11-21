@@ -6,7 +6,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Roboto", "sans-serif", ...defaultTheme.fontFamily.sans],
+        sans: ["'Plus Jakarta Sans'", "'Noto Sans SC'", "'PingFang SC'", "'Microsoft YaHei UI'", "Roboto", "sans-serif", ...defaultTheme.fontFamily.sans],
+        serif: ["'Newsreader'", "'Noto Serif SC'", "Georgia", "serif", ...defaultTheme.fontFamily.serif],
+        mono: ["'JetBrains Mono'", "'JetBrains Mono Variable'", "'Google Sans Mono'", "Consolas", "monospace", ...defaultTheme.fontFamily.mono],
       },
     },
   },

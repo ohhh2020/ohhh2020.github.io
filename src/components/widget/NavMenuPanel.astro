@@ -9,7 +9,7 @@ interface Props {
 
 const links = Astro.props.links;
 ---
-<div id="nav-menu-panel" class:list={["float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2"]}>
+<div id="nav-menu-panel" class:list={["float-panel float-panel-closed absolute transition-all fixed right-4 px-2 py-2 min-w-[14rem]"]}>
     {links.map((link) => (
         <a href={link.external ? link.url : url(link.url)} class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
             hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition
@@ -29,4 +29,58 @@ const links = Astro.props.links;
             </Icon>}
         </a>
     ))}
+
+    <!-- Mobile Obsidian Prism Presets -->
+    <div class="mt-2 pt-2 border-t border-[var(--line-divider)] px-1">
+        <div class="text-[11px] font-bold text-50 mb-2 px-1 uppercase tracking-wider">黑曜棱镜 · 预设</div>
+        <div class="grid grid-cols-2 gap-1.5">
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="obsidian-dark">
+                <span class="w-2 h-2 rounded-full bg-[#669DF6]"></span>
+                <span>深空黑曜</span>
+            </button>
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="warm-dark">
+                <span class="w-2 h-2 rounded-full bg-[#D97757]"></span>
+                <span>暖炭玄岩</span>
+            </button>
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="daylight-crystal">
+                <span class="w-2 h-2 rounded-full bg-[#2563EB]"></span>
+                <span>白昼冷晶</span>
+            </button>
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="warm-alabaster">
+                <span class="w-2 h-2 rounded-full bg-[#C25934]"></span>
+                <span>暖白画册</span>
+            </button>
+        </div>
+    </div>
 </div>
+
+<script>
+    function bindMobilePresetButtons() {
+        document.querySelectorAll('.mobile-preset-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const preset = btn.getAttribute('data-preset');
+                if (preset) {
+                    const isDark = preset === 'obsidian-dark' || preset === 'warm-dark';
+                    const root = document.documentElement;
+                    root.setAttribute('data-prism-preset', preset);
+                    if (isDark) {
+                        root.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        root.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+                    localStorage.setItem('prism-preset', preset);
+                    localStorage.removeItem('prism-auto');
+                    window.dispatchEvent(new CustomEvent('prism-preset-change', { detail: { preset } }));
+                }
+            });
+        });
+    }
+
+    bindMobilePresetButtons();
+    // @ts-ignore
+    window.swup?.hooks?.on('page:view', () => {
+        bindMobilePresetButtons();
+    });
+</script>
