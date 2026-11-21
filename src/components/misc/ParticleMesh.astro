@@ -1,142 +1,384 @@
 ---
+// Obsidian Prism: Interactive Monospace ASCII Matrix & Glyph Ripple Canvas Floor
 ---
-<!-- 动态背景科技粒子星网 Canvas -->
-<canvas id="particle-mesh-canvas" class="fixed inset-0 pointer-events-none z-[-1] opacity-60 dark:opacity-40"></canvas>
+<div id="ag-prism-ripple-backdrop" class="ag-v2-ripple-backdrop fixed inset-0 pointer-events-none z-0" aria-hidden="true">
+    <canvas id="ag-prism-brand-glow" class="ag-v2-brand-glow absolute inset-0 w-full h-full block pointer-events-none" aria-hidden="true"></canvas>
+    <canvas id="ag-prism-ripple-canvas" class="ag-cs-ripple-canvas relative w-full h-full block" aria-hidden="true"></canvas>
+</div>
 
 <script>
-    class ParticleMesh {
-        private canvas: HTMLCanvasElement;
-        private ctx: CanvasRenderingContext2D;
-        private particles: Array<{
+    interface RipplePalette {
+        dark: boolean;
+        ink: number[];
+        wave: number[];
+        fontFamily: string;
+        prismStrength: number;
+        aura: {
             x: number;
             y: number;
-            vx: number;
-            vy: number;
             radius: number;
-        }> = [];
-        private mouse: { x: number | null; y: number | null } = { x: null, y: null };
-        private maxDistance = 110;
-        private mouseDistance = 140;
-
-        constructor(canvas: HTMLCanvasElement) {
-            this.canvas = canvas;
-            this.ctx = canvas.getContext("2d")!;
-            this.init();
-        }
-
-        private init() {
-            this.resize();
-            this.createParticles();
-            this.bindEvents();
-            this.animate();
-        }
-
-        private resize = () => {
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-            this.canvas.width = window.innerWidth * dpr;
-            this.canvas.height = window.innerHeight * dpr;
-            this.ctx.scale(dpr, dpr);
+            strength: number;
+            active: boolean;
         };
+        spectrum?: string;
+        nebula?: boolean;
+        auraPhase?: number;
+    }
 
-        private createParticles() {
-            const isMobile = window.innerWidth < 768;
-            const count = isMobile ? 22 : 48;
-            this.particles = [];
+    interface RippleCore {
+        RIPPLE: {
+            fontSize: number;
+            cellWidth: number;
+            cellHeight: number;
+            [key: string]: any;
+        };
+        createWaveField: (cols: number, rows: number) => any;
+        createGlyphField: (canvas: HTMLCanvasElement, cols: number, rows: number, waves: any, options?: any) => any;
+        mountBrandHorizonGlow: (canvas: HTMLCanvasElement, options?: any) => any;
+        parseCssColorToRgb: (str: string) => number[] | null;
+    }
 
-            for (let i = 0; i < count; i++) {
-                this.particles.push({
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
-                    vx: (Math.random() - 0.5) * 0.7,
-                    vy: (Math.random() - 0.5) * 0.7,
-                    radius: Math.random() * 1.5 + 1,
+    declare global {
+        interface Window {
+            __agCsRippleCore?: RippleCore;
+            __agPrismRippleInitialized?: boolean;
+            __agPrismRippleRefresh?: () => void;
+        }
+    }
+
+    function initPrismRipple() {
+        if (typeof window === "undefined") return;
+
+        const canvas = document.getElementById("ag-prism-ripple-canvas") as HTMLCanvasElement | null;
+        const glowCanvas = document.getElementById("ag-prism-brand-glow") as HTMLCanvasElement | null;
+        const backdrop = document.getElementById("ag-prism-ripple-backdrop") as HTMLElement | null;
+        if (!canvas || !backdrop) return;
+
+        // If already initialized on this page, just trigger a theme refresh
+        if (window.__agPrismRippleInitialized && typeof window.__agPrismRippleRefresh === "function") {
+            window.__agPrismRippleRefresh();
+            return;
+        }
+
+        const getRippleCore = (): RippleCore | null => window.__agCsRippleCore || null;
+
+        let waves: any = null;
+        let field: any = null;
+        let glow: any = null;
+        let columns = 0;
+        let rows = 0;
+        let dpr = 1;
+        let rafId = 0;
+        let lastStepAt = performance.now();
+        let lastSkimX: number | null = null;
+        let lastSkimY: number | null = null;
+        let lastSkimAt = 0;
+        let skimCarryDist = 0;
+        const auraState = { x: 0, y: 0, active: false };
+        let mountedAt = performance.now();
+        let isSleeping = false;
+        let forceSingleDraw = true;
+
+        const isDarkTheme = () => document.documentElement.classList.contains("dark");
+        const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        function resolveSpectrumMode(dark: boolean): string {
+            const preset = document.documentElement.getAttribute("data-prism-preset") || "";
+            if (preset === "warm-dark" || preset === "warm-alabaster") return "warm";
+            if (preset === "daylight-crystal") return "cobalt";
+            return "default";
+        }
+
+        function getRipplePalette(aura: typeof auraState, now: number): RipplePalette {
+            const rippleCore = getRippleCore();
+            const cs = getComputedStyle(document.documentElement);
+            const dark = isDarkTheme();
+            const spec = resolveSpectrumMode(dark);
+
+            const parsedInk = rippleCore?.parseCssColorToRgb(cs.getPropertyValue("--ag-v2-ripple-ink"));
+            const parsedWave = rippleCore?.parseCssColorToRgb(cs.getPropertyValue("--ag-v2-ripple-wave"));
+
+            const defaultInk = dark ? [146, 148, 156] : [104, 114, 134];
+            const defaultWave = dark
+                ? [214, 218, 228]
+                : spec === "warm"
+                ? [194, 89, 52]
+                : [37, 99, 235];
+
+            const ink = parsedInk || defaultInk;
+            const wave = parsedWave || defaultWave;
+            const fontFamily = cs.getPropertyValue("--font-mono").trim() || 'ui-monospace, Consolas, "Cascadia Code", monospace';
+
+            const auraActive = aura.active && !prefersReducedMotion();
+            return {
+                dark,
+                ink,
+                wave,
+                fontFamily,
+                prismStrength: 1.0,
+                aura: auraActive
+                    ? { x: aura.x, y: aura.y, radius: 240, strength: 1.0, active: true }
+                    : { x: 0, y: 0, radius: 240, strength: 0, active: false },
+                spectrum: spec,
+                nebula: true,
+                auraPhase: (now || 0) * 0.0006,
+            };
+        }
+
+        function setupField() {
+            const rippleCore = getRippleCore();
+            if (!rippleCore) return;
+
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (w <= 0 || h <= 0) return;
+
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            const cellW = rippleCore.RIPPLE.cellWidth;
+            const cellH = rippleCore.RIPPLE.cellHeight;
+
+            columns = Math.max(16, Math.ceil(w / cellW));
+            rows = Math.max(8, Math.ceil(h / cellH));
+
+            canvas.width = Math.round(columns * cellW * dpr);
+            canvas.height = Math.round(rows * cellH * dpr);
+            canvas.style.width = `${columns * cellW}px`;
+            canvas.style.height = `${rows * cellH}px`;
+
+            if (glowCanvas && typeof rippleCore.mountBrandHorizonGlow === "function") {
+                if (!glow) {
+                    glow = rippleCore.mountBrandHorizonGlow(glowCanvas);
+                }
+                glow.resize(w, h, 0.6);
+            }
+
+            if (field) {
+                try { field.dispose(); } catch {}
+            }
+
+            waves = rippleCore.createWaveField(columns, rows);
+            field = rippleCore.createGlyphField(canvas, columns, rows, waves);
+
+            // Initial gentle disturbances for visual depth upon load
+            waves.disturb(Math.floor(columns * 0.28), Math.floor(rows * 0.32));
+            waves.disturb(Math.floor(columns * 0.72), Math.floor(rows * 0.65));
+
+            forceSingleDraw = true;
+            wake();
+        }
+
+        function wake() {
+            if (isSleeping) {
+                isSleeping = false;
+                lastStepAt = performance.now();
+            }
+            if (!rafId && !document.hidden) {
+                rafId = requestAnimationFrame(loop);
+            }
+        }
+
+        function loop(now: number) {
+            rafId = 0;
+            if (!waves || !field) return;
+
+            const still = prefersReducedMotion();
+            const realDt = Math.min(0.05, Math.max(0.001, (now - lastStepAt) / 1000));
+            lastStepAt = now;
+
+            const dark = isDarkTheme();
+            const spec = resolveSpectrumMode(dark);
+
+            if (glow && typeof glow.draw === "function") {
+                glow.draw(now, {
+                    dark,
+                    still,
+                    strength: 1,
+                    reach: 0.47,
+                    ambientIntensity: 1,
+                    spectrum: spec,
                 });
             }
+
+            if (waves.active()) {
+                waves.advance(still ? 0 : realDt);
+            }
+
+            const needsRender =
+                forceSingleDraw ||
+                (now - mountedAt < 1600) ||
+                auraState.active ||
+                (field.needsDraw && field.needsDraw(now, still)) ||
+                (typeof field.busy === "function" && field.busy());
+
+            if (needsRender) {
+                forceSingleDraw = false;
+                field.draw(now, getRipplePalette(auraState, now), still);
+            }
+
+            // True 0fps idle sleep when mouse stops and wave energy settles
+            const fieldBusy = typeof field.busy === "function" ? field.busy() : waves.active();
+            const auraRecent = auraState.active && (now - lastSkimAt < 1200);
+            const inIntro = !still && (now - mountedAt < 1600);
+
+            if (!still && (fieldBusy || auraRecent || inIntro)) {
+                rafId = requestAnimationFrame(loop);
+            } else {
+                isSleeping = true;
+            }
         }
 
-        private bindEvents() {
-            window.addEventListener("resize", () => {
-                this.resize();
-                this.createParticles();
-            });
+        // Pointer listeners on window
+        const onMove = (ev: PointerEvent) => {
+            if (prefersReducedMotion()) return;
 
-            window.addEventListener("mousemove", (e) => {
-                this.mouse.x = e.clientX;
-                this.mouse.y = e.clientY;
-            });
+            const x = ev.clientX;
+            const y = ev.clientY;
+            const now = performance.now();
 
-            window.addEventListener("mouseleave", () => {
-                this.mouse.x = null;
-                this.mouse.y = null;
-            });
-        }
-
-        private animate = () => {
-            const isDark = document.documentElement.classList.contains("dark");
-            const nodeColor = isDark ? "rgba(148, 163, 184, 0.45)" : "rgba(71, 85, 105, 0.35)";
-            const lineColorBase = isDark ? "148, 163, 184" : "100, 116, 139";
-
-            this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-            // Update & draw particles
-            for (let i = 0; i < this.particles.length; i++) {
-                const p = this.particles[i];
-
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // Bounce off edges
-                if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
-                if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
-
-                // Draw point
-                this.ctx.beginPath();
-                this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                this.ctx.fillStyle = nodeColor;
-                this.ctx.fill();
-
-                // Connect to other particles
-                for (let j = i + 1; j < this.particles.length; j++) {
-                    const p2 = this.particles[j];
-                    const dx = p.x - p2.x;
-                    const dy = p.y - p2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < this.maxDistance) {
-                        const alpha = (1 - dist / this.maxDistance) * 0.22;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(p.x, p.y);
-                        this.ctx.lineTo(p2.x, p2.y);
-                        this.ctx.strokeStyle = `rgba(${lineColorBase}, ${alpha})`;
-                        this.ctx.lineWidth = 0.8;
-                        this.ctx.stroke();
-                    }
+            if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
+                if (auraState.active) {
+                    auraState.active = false;
+                    forceSingleDraw = true;
+                    if (field) field.invalidate();
+                    wake();
                 }
+                return;
+            }
 
-                // Connect to cursor
-                if (this.mouse.x !== null && this.mouse.y !== null) {
-                    const dx = p.x - this.mouse.x;
-                    const dy = p.y - this.mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+            // High-speed skimmer wake ripple physics
+            if (lastSkimX !== null && lastSkimY !== null && waves) {
+                const stepDist = Math.hypot(x - lastSkimX, y - lastSkimY);
+                const dtSec = Math.max(0.004, (now - lastSkimAt) / 1000);
+                const pxPerSec = stepDist / dtSec;
 
-                    if (dist < this.mouseDistance) {
-                        const alpha = (1 - dist / this.mouseDistance) * 0.45;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(p.x, p.y);
-                        this.ctx.lineTo(this.mouse.x, this.mouse.y);
-                        this.ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
-                        this.ctx.lineWidth = 1;
-                        this.ctx.stroke();
+                if (pxPerSec >= 220) {
+                    skimCarryDist += stepDist;
+                    if (skimCarryDist >= 42) {
+                        skimCarryDist = Math.min(20, skimCarryDist - 42);
+                        const speedNorm = Math.max(0.05, Math.min(1, (pxPerSec - 220) / 1800));
+                        const rippleCore = getRippleCore();
+                        if (rippleCore) {
+                            const col = Math.floor(x / rippleCore.RIPPLE.cellWidth);
+                            const row = Math.floor(y / rippleCore.RIPPLE.cellHeight);
+                            if (typeof waves.skimmer === "function") {
+                                waves.skimmer(col, row, speedNorm);
+                            }
+                        }
                     }
+                } else {
+                    skimCarryDist *= 0.85;
                 }
             }
 
-            requestAnimationFrame(this.animate);
+            lastSkimX = x;
+            lastSkimY = y;
+            lastSkimAt = now;
+
+            auraState.x = x;
+            auraState.y = y;
+            auraState.active = true;
+
+            if (field) field.invalidate();
+            wake();
         };
+
+        const onLeave = () => {
+            lastSkimX = null;
+            lastSkimY = null;
+            skimCarryDist = 0;
+            if (auraState.active) {
+                auraState.active = false;
+                forceSingleDraw = true;
+                if (field) field.invalidate();
+                wake();
+            }
+        };
+
+        const onDown = (ev: PointerEvent) => {
+            if (ev.button !== 0 || prefersReducedMotion() || !waves) return;
+            const rippleCore = getRippleCore();
+            if (!rippleCore) return;
+
+            const col = Math.floor(ev.clientX / rippleCore.RIPPLE.cellWidth);
+            const row = Math.floor(ev.clientY / rippleCore.RIPPLE.cellHeight);
+
+            waves.disturb(col, row);
+            if (field) field.invalidate();
+            wake();
+        };
+
+        window.addEventListener("pointermove", onMove, { passive: true });
+        window.addEventListener("pointerdown", onDown, { passive: true });
+        document.documentElement.addEventListener("pointerleave", onLeave, { passive: true });
+
+        // Handle window resize with debounce
+        let resizeTimeout: any = null;
+        window.addEventListener("resize", () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                setupField();
+            }, 100);
+        });
+
+        // Visibility change
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                lastStepAt = performance.now();
+                forceSingleDraw = true;
+                wake();
+            } else {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = 0;
+                isSleeping = true;
+            }
+        });
+
+        window.__agPrismRippleInitialized = true;
+        window.__agPrismRippleRefresh = () => {
+            forceSingleDraw = true;
+            if (field) field.invalidate();
+            wake();
+        };
+
+        // If core is already loaded, setup immediately, else wait for core
+        if (getRippleCore()) {
+            setupField();
+        } else {
+            const checkInterval = setInterval(() => {
+                if (getRippleCore()) {
+                    clearInterval(checkInterval);
+                    setupField();
+                }
+            }, 50);
+        }
     }
 
-    const canvas = document.getElementById("particle-mesh-canvas") as HTMLCanvasElement;
-    if (canvas) {
-        new ParticleMesh(canvas);
+    // Initialize on DOM ready
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initPrismRipple);
+    } else {
+        initPrismRipple();
     }
+
+    // Swup Page View hook
+    document.addEventListener("swup:page:view", () => {
+        if (typeof window.__agPrismRippleRefresh === "function") {
+            window.__agPrismRippleRefresh();
+        } else {
+            initPrismRipple();
+        }
+    });
+
+    // Preset & theme change observer
+    const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            if (m.type === "attributes" && (m.attributeName === "class" || m.attributeName === "data-prism-preset")) {
+                if (typeof window.__agPrismRippleRefresh === "function") {
+                    window.__agPrismRippleRefresh();
+                }
+            }
+        }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "data-prism-preset"] });
 </script>
