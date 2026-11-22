@@ -3,86 +3,75 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 ---
 
 <MainGridLayout title="学习统计与专注计时" description="学研时序 · 学习时间累计与 GitHub 贡献热力图分析">
-    <!-- 主标题 HUD 卡片 -->
-    <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--gh-l3)]/15 text-[var(--gh-l4)] text-xs font-semibold mb-2 border border-[var(--gh-l3)]/30">
-                    <span class="w-2 h-2 rounded-full bg-[var(--gh-l4)] animate-pulse"></span>
-                    研习时序沉淀 · GitHub 贡献绿图谱
-                </div>
-                <h1 class="text-2xl md:text-3xl font-bold text-black/90 dark:text-white/90 mb-1">
-                    学习时间累计与专注看板
-                </h1>
-                <p class="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">
-                    不积跬步，无以至千里。每一次深度思考与研习，都在时间轴上点亮一枚绿晶像素。
-                </p>
+    <!-- 4 项核心数据指标统计网格 (置顶直出，无冗余文字宣传) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 onload-animation">
+        <div class="card-base p-4 rounded-xl">
+            <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">累计研习总时长</div>
+            <div class="flex items-baseline gap-1.5">
+                <span id="stat-total-hours" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">146.5</span>
+                <span class="text-xs text-neutral-400 font-medium">小时</span>
             </div>
-            <!-- 快速打卡与模式切换按钮组 -->
-            <div class="flex items-center gap-2 flex-wrap shrink-0">
-                <button id="quick-add-30m" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-black/5 dark:bg-white/5 hover:bg-[var(--gh-l3)]/20 hover:text-[var(--gh-l4)] border border-black/10 dark:border-white/10 transition-all flex items-center gap-1">
-                    <span>⚡ 补卡 +30m</span>
-                </button>
-                <button id="quick-add-1h" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-[var(--gh-l3)]/15 text-[var(--gh-l4)] hover:bg-[var(--gh-l3)]/25 border border-[var(--gh-l3)]/40 transition-all flex items-center gap-1 font-semibold">
-                    <span>⚡ 补卡 +1h</span>
-                </button>
-                <button id="reset-seed-data" class="px-2.5 py-1.5 text-xs rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-all" title="重置回学期完整历史种子数据">
-                    <span>↺ 恢复样例数据</span>
-                </button>
-            </div>
+            <div class="text-[11px] text-[var(--gh-l4)] font-medium mt-1">本学期稳定沉淀</div>
         </div>
 
-        <!-- 4 项核心数据指标统计网格 -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mt-6 pt-6 border-t border-black/5 dark:border-white/10">
-            <div class="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5">
-                <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">累计研习总时长</div>
-                <div class="flex items-baseline gap-1.5">
-                    <span id="stat-total-hours" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">146.5</span>
-                    <span class="text-xs text-neutral-400 font-medium">小时</span>
-                </div>
-                <div class="text-[11px] text-[var(--gh-l4)] font-medium mt-1">本学期稳定沉淀</div>
+        <div class="card-base p-4 rounded-xl">
+            <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">今日专注时长</div>
+            <div class="flex items-baseline gap-1.5">
+                <span id="stat-today-hours" class="text-2xl md:text-3xl font-extrabold text-[var(--gh-l4)] font-mono">3.8</span>
+                <span class="text-xs text-neutral-400 font-medium">小时</span>
             </div>
+            <div class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">已达日均建议标准</div>
+        </div>
 
-            <div class="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5">
-                <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">今日专注时长</div>
-                <div class="flex items-baseline gap-1.5">
-                    <span id="stat-today-hours" class="text-2xl md:text-3xl font-extrabold text-[var(--gh-l4)] font-mono">3.8</span>
-                    <span class="text-xs text-neutral-400 font-medium">小时</span>
-                </div>
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">已达日均建议标准</div>
+        <div class="card-base p-4 rounded-xl">
+            <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">本周冲刺学时</div>
+            <div class="flex items-baseline gap-1.5">
+                <span id="stat-week-hours" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">24.5</span>
+                <span class="text-xs text-neutral-400 font-medium">小时</span>
             </div>
+            <div class="text-[11px] text-[var(--gh-l4)] font-medium mt-1">周环比 +18% 🔥</div>
+        </div>
 
-            <div class="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5">
-                <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">本周冲刺学时</div>
-                <div class="flex items-baseline gap-1.5">
-                    <span id="stat-week-hours" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">24.5</span>
-                    <span class="text-xs text-neutral-400 font-medium">小时</span>
-                </div>
-                <div class="text-[11px] text-[var(--gh-l4)] font-medium mt-1">周环比 +18% 🔥</div>
+        <div class="card-base p-4 rounded-xl">
+            <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">连续专注天数</div>
+            <div class="flex items-baseline gap-1.5">
+                <span id="stat-streak-days" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">21</span>
+                <span class="text-xs text-neutral-400 font-medium">天连续</span>
             </div>
-
-            <div class="p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5">
-                <div class="text-xs text-neutral-500 dark:text-neutral-400 font-medium mb-1">连续专注天数</div>
-                <div class="flex items-baseline gap-1.5">
-                    <span id="stat-streak-days" class="text-2xl md:text-3xl font-extrabold text-black/90 dark:text-white/90 font-mono">21</span>
-                    <span class="text-xs text-neutral-400 font-medium">天连续</span>
-                </div>
-                <div class="text-[11px] text-amber-500 font-medium mt-1">达成专注习惯常态化</div>
-            </div>
+            <div class="text-[11px] text-amber-500 font-medium mt-1">达成专注习惯常态化</div>
         </div>
     </div>
 
     <!-- 实时学习计时器核心交互卡片 -->
     <div class="card-base p-6 md:p-8 rounded-2xl mb-6 onload-animation relative overflow-hidden" id="timer-card">
+        <!-- 顶部快捷操作栏 -->
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-black/5 dark:border-white/10 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-[var(--gh-l4)]"></div>
+                <span class="text-sm font-bold text-black/90 dark:text-white/90">实时专注时钟</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button type="button" id="quick-add-30m" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-black/5 dark:bg-white/5 hover:bg-[var(--gh-l3)]/20 hover:text-[var(--gh-l4)] border border-black/10 dark:border-white/10 transition-all cursor-pointer">
+                    ⚡ 补卡 +30m
+                </button>
+                <button type="button" id="quick-add-1h" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-[var(--gh-l3)]/15 text-[var(--gh-l4)] hover:bg-[var(--gh-l3)]/25 border border-[var(--gh-l3)]/40 transition-all font-semibold cursor-pointer">
+                    ⚡ 补卡 +1h
+                </button>
+                <button type="button" id="reset-seed-data" class="px-2 py-1 text-xs rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-all cursor-pointer" title="重置回学期完整历史种子数据">
+                    ↺ 恢复样例数据
+                </button>
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
             <!-- 计时器表盘区域 -->
             <div class="flex flex-col items-center md:items-start text-center md:text-left">
                 <!-- 计时模式选择 -->
                 <div class="inline-flex p-1 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/10 mb-4 text-xs font-medium">
-                    <button id="mode-stopwatch" class="px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm transition-all font-semibold">
+                    <button type="button" id="mode-stopwatch" class="px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm transition-all font-semibold cursor-pointer">
                         正向累计 (自由计时)
                     </button>
-                    <button id="mode-pomodoro" class="px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all">
+                    <button type="button" id="mode-pomodoro" class="px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
                         番茄专注 (倒计时)
                     </button>
                 </div>
@@ -98,10 +87,10 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                 <!-- 预设时长胶囊 (番茄模式生效) -->
                 <div id="pomo-duration-pills" class="hidden flex items-center gap-2 mt-3">
                     <span class="text-xs text-neutral-400">设定时长:</span>
-                    <button data-duration="25" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-[var(--gh-l3)]/20 text-[var(--gh-l4)] font-semibold border border-[var(--gh-l3)]/40">25m</button>
-                    <button data-duration="45" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent">45m</button>
-                    <button data-duration="60" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent">60m</button>
-                    <button data-duration="90" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent">90m</button>
+                    <button type="button" data-duration="25" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-[var(--gh-l3)]/20 text-[var(--gh-l4)] font-semibold border border-[var(--gh-l3)]/40 cursor-pointer">25m</button>
+                    <button type="button" data-duration="45" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent cursor-pointer">45m</button>
+                    <button type="button" data-duration="60" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent cursor-pointer">60m</button>
+                    <button type="button" data-duration="90" class="pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent cursor-pointer">90m</button>
                 </div>
             </div>
 
@@ -125,18 +114,18 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
                 <!-- 控制按钮 -->
                 <div class="flex items-center gap-3">
-                    <button id="timer-btn-toggle" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-[var(--gh-l4)] text-black hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[var(--gh-glow)] flex items-center gap-2">
-                        <svg id="timer-icon-play" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="timer-icon-pause" class="w-4 h-4 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        <span id="timer-btn-text">开始专注</span>
+                    <button type="button" id="timer-btn-toggle" class="px-6 py-2.5 rounded-xl font-bold text-sm bg-[var(--gh-l4)] text-black hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[var(--gh-glow)] flex items-center gap-2 cursor-pointer">
+                        <svg id="timer-icon-play" class="w-4 h-4 fill-current pointer-events-none" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="timer-icon-pause" class="w-4 h-4 fill-current hidden pointer-events-none" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        <span id="timer-btn-text" class="pointer-events-none">开始专注</span>
                     </button>
 
-                    <button id="timer-btn-save" class="px-4 py-2.5 rounded-xl font-semibold text-sm bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-300 border border-black/10 dark:border-white/10 transition-all disabled:opacity-40 disabled:pointer-events-none" disabled>
+                    <button type="button" id="timer-btn-save" class="px-4 py-2.5 rounded-xl font-semibold text-sm bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-300 border border-black/10 dark:border-white/10 transition-all disabled:opacity-40 disabled:pointer-events-none cursor-pointer" disabled>
                         结算打卡
                     </button>
 
-                    <button id="timer-btn-reset" class="p-2.5 rounded-xl text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/5 transition-all" title="重置计时器">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    <button type="button" id="timer-btn-reset" class="p-2.5 rounded-xl text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer" title="重置计时器">
+                        <svg class="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
                 </div>
             </div>
@@ -209,22 +198,22 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
             <!-- 分析维度切换胶囊 -->
             <div class="inline-flex p-1 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/10 text-xs font-medium">
-                <button id="chart-tab-daily" class="chart-tab-btn px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all">
+                <button type="button" id="chart-tab-daily" data-tab="daily" class="chart-tab-btn px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all cursor-pointer">
                     近 14 天每日柱状
                 </button>
-                <button id="chart-tab-weekly" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all">
+                <button type="button" id="chart-tab-weekly" data-tab="weekly" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
                     近 8 周累计
                 </button>
-                <button id="chart-tab-monthly" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all">
+                <button type="button" id="chart-tab-monthly" data-tab="monthly" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
                     近 6 个月汇总
                 </button>
-                <button id="chart-tab-subjects" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all">
+                <button type="button" id="chart-tab-subjects" data-tab="subjects" class="chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
                     学科分布
                 </button>
             </div>
         </div>
 
-        <!-- 柱状图主渲染视口 (纯矢量 SVG + CSS，零第三方库，0ms 阻塞加载) -->
+        <!-- 柱状图主渲染视口 (纯原生 SVG + CSS，零第三方库，0ms 阻塞加载) -->
         <div id="chart-container" class="relative w-full h-64 md:h-72">
             <!-- 由 JS 动态绘制 -->
         </div>
@@ -266,7 +255,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
     </div>
 </MainGridLayout>
 
-<!-- 悬停气泡 Tooltip (全局单例，避免多节点开销) -->
+<!-- 悬停气泡 Tooltip (全局单例) -->
 <div id="gh-tooltip" class="fixed pointer-events-none z-50 px-3 py-1.5 rounded-lg text-xs bg-neutral-900/95 text-white border border-white/15 shadow-xl backdrop-blur-md opacity-0 transition-opacity duration-150 -translate-x-1/2 -translate-y-full mb-2">
     <div id="gh-tooltip-date" class="font-bold text-[11px] text-neutral-300"></div>
     <div id="gh-tooltip-content" class="text-xs text-[var(--gh-l4)] font-semibold mt-0.5"></div>
@@ -319,7 +308,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 </style>
 
 <script>
-    // ── 学习时间统计与分析引擎 ──────────────────────────────────────────
+    // ── 全局单例计时器与数据仓库 (支持跨页面后台持续计时与无感知持久化) ──
     interface StudySession {
         id: string;
         date: string; // YYYY-MM-DD
@@ -330,8 +319,9 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
     }
 
     const STORAGE_KEY = "ohhh_study_tracker_sessions_v1";
+    const TIMER_STATE_KEY = "ohhh_study_active_timer_v1";
 
-    // 默认学期样例数据（围绕用户近期学习科目）
+    // 默认学期历史种子数据（近 120 天围绕用户学科）
     function generateSeedData(): StudySession[] {
         const list: StudySession[] = [];
         const subjects = [
@@ -343,22 +333,19 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
         ];
 
         const today = new Date();
-        // 倒推 120 天，每天以合理概率生成 1~3 条学习记录
         for (let i = 120; i >= 0; i--) {
             const d = new Date(today);
             d.setDate(d.getDate() - i);
             const dateStr = d.toISOString().split("T")[0];
 
-            // 周末学得多一点，工作日正常学
             const dayOfWeek = d.getDay();
             const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
             const studyProb = isWeekend ? 0.95 : 0.88;
 
             if (Math.random() < studyProb) {
-                // 当天投入时长 60 ~ 300 分钟
                 const sessionCount = Math.floor(Math.random() * 2) + 1;
                 for (let s = 0; s < sessionCount; s++) {
-                    const dur = Math.floor(Math.random() * 75) + 45; // 45~120分钟
+                    const dur = Math.floor(Math.random() * 75) + 45;
                     const subj = subjects[Math.floor(Math.random() * subjects.length)];
                     list.push({
                         id: `seed-${dateStr}-${s}`,
@@ -394,191 +381,135 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
         } catch {}
     }
 
-    // ── 初始化页面状态与控制器 ──────────────────────────────────────────
-    function initStudyDashboard() {
+    // 计时器核心运行态
+    const TimerCore = {
+        running: false,
+        seconds: 0,
+        mode: "stopwatch" as "stopwatch" | "pomodoro",
+        pomoTargetSeconds: 25 * 60,
+        intervalId: null as any,
+        startEpoch: 0,
+        baseSeconds: 0,
+
+        init() {
+            // 尝试从 sessionStorage 恢复跨页面可能正在进行的计时
+            try {
+                const saved = sessionStorage.getItem(TIMER_STATE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    this.mode = parsed.mode || "stopwatch";
+                    this.pomoTargetSeconds = parsed.pomoTargetSeconds || 25 * 60;
+                    if (parsed.running && parsed.startEpoch) {
+                        const elapsedSince = Math.floor((Date.now() - parsed.startEpoch) / 1000);
+                        this.seconds = (parsed.baseSeconds || 0) + elapsedSince;
+                        this.start();
+                    } else {
+                        this.seconds = parsed.seconds || 0;
+                    }
+                }
+            } catch {}
+        },
+
+        saveState() {
+            try {
+                sessionStorage.setItem(TIMER_STATE_KEY, JSON.stringify({
+                    running: this.running,
+                    seconds: this.seconds,
+                    mode: this.mode,
+                    pomoTargetSeconds: this.pomoTargetSeconds,
+                    startEpoch: this.startEpoch,
+                    baseSeconds: this.baseSeconds,
+                }));
+            } catch {}
+        },
+
+        start() {
+            if (this.running) return;
+            this.running = true;
+            this.startEpoch = Date.now();
+            this.baseSeconds = this.seconds;
+            this.saveState();
+
+            clearInterval(this.intervalId);
+            this.intervalId = setInterval(() => {
+                const elapsedSince = Math.floor((Date.now() - this.startEpoch) / 1000);
+                this.seconds = this.baseSeconds + elapsedSince;
+                this.syncUI();
+
+                if (this.mode === "pomodoro" && this.seconds >= this.pomoTargetSeconds) {
+                    this.pause();
+                    alert("🎉 恭喜完成一次番茄钟专注！记得点击结算打卡保存本次学时。");
+                }
+            }, 500);
+
+            this.syncUI();
+        },
+
+        pause() {
+            this.running = false;
+            clearInterval(this.intervalId);
+            this.baseSeconds = this.seconds;
+            this.saveState();
+            this.syncUI();
+        },
+
+        reset() {
+            this.pause();
+            this.seconds = 0;
+            this.baseSeconds = 0;
+            this.saveState();
+            this.syncUI();
+        },
+
+        syncUI() {
+            const display = document.getElementById("timer-display");
+            const dot = document.getElementById("timer-pulse-dot");
+            const btnText = document.getElementById("timer-btn-text");
+            const iconPlay = document.getElementById("timer-icon-play");
+            const iconPause = document.getElementById("timer-icon-pause");
+            const btnSave = document.getElementById("timer-btn-save") as HTMLButtonElement | null;
+
+            if (display) {
+                const totalSec = this.mode === "stopwatch"
+                    ? this.seconds
+                    : Math.max(0, this.pomoTargetSeconds - this.seconds);
+
+                const h = Math.floor(totalSec / 3600);
+                const m = Math.floor((totalSec % 3600) / 60);
+                const s = totalSec % 60;
+                display.textContent = `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+            }
+
+            if (dot) dot.style.opacity = this.running ? "1" : "0";
+            if (btnText) btnText.textContent = this.running ? "暂停专注" : (this.seconds > 0 ? "继续专注" : "开始专注");
+            if (iconPlay) iconPlay.classList.toggle("hidden", this.running);
+            if (iconPause) iconPause.classList.toggle("hidden", !this.running);
+            if (btnSave) btnSave.disabled = (this.seconds < 10 && !this.running);
+        }
+    };
+
+    TimerCore.init();
+
+    // ── 页面视图控制器 (在当前 DOM 树上挂载渲染) ──────────────────────
+    let currentChartTab = "daily";
+
+    function mountStudyViews() {
+        const isStudyPage = window.location.pathname.includes("/study");
+        if (!isStudyPage) return;
+
         let sessions = getStoredSessions();
 
-        // 1. 计时器状态
-        let timerRunning = false;
-        let timerSeconds = 0;
-        let timerMode: "stopwatch" | "pomodoro" = "stopwatch";
-        let pomoTargetSeconds = 25 * 60;
-        let timerInterval: any = null;
+        // 1. 同步计时器 UI
+        TimerCore.syncUI();
 
-        const timerDisplay = document.getElementById("timer-display");
-        const timerPulseDot = document.getElementById("timer-pulse-dot");
-        const btnToggle = document.getElementById("timer-btn-toggle");
-        const btnSave = document.getElementById("timer-btn-save") as HTMLButtonElement | null;
-        const btnReset = document.getElementById("timer-btn-reset");
-        const btnText = document.getElementById("timer-btn-text");
-        const iconPlay = document.getElementById("timer-icon-play");
-        const iconPause = document.getElementById("timer-icon-pause");
-        const subjectSelect = document.getElementById("timer-subject") as HTMLSelectElement | null;
-        const modeStopwatch = document.getElementById("mode-stopwatch");
-        const modePomodoro = document.getElementById("mode-pomodoro");
-        const pomoPills = document.getElementById("pomo-duration-pills");
-
-        function formatHMS(totalSec: number) {
-            const h = Math.floor(totalSec / 3600);
-            const m = Math.floor((totalSec % 3600) / 60);
-            const s = totalSec % 60;
-            return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-        }
-
-        function updateTimerUI() {
-            if (!timerDisplay) return;
-            if (timerMode === "stopwatch") {
-                timerDisplay.textContent = formatHMS(timerSeconds);
-            } else {
-                const remaining = Math.max(0, pomoTargetSeconds - timerSeconds);
-                timerDisplay.textContent = formatHMS(remaining);
-            }
-        }
-
-        function startTimer() {
-            if (timerRunning) return;
-            timerRunning = true;
-            timerInterval = setInterval(() => {
-                timerSeconds++;
-                updateTimerUI();
-                if (timerMode === "pomodoro" && timerSeconds >= pomoTargetSeconds) {
-                    pauseTimer();
-                    alert("🎉 恭喜完成一次番茄钟专注！记得点击结算保存学时。");
-                }
-            }, 1000);
-
-            if (timerPulseDot) timerPulseDot.style.opacity = "1";
-            if (btnText) btnText.textContent = "暂停专注";
-            if (iconPlay) iconPlay.classList.add("hidden");
-            if (iconPause) iconPause.classList.remove("hidden");
-            if (btnSave) btnSave.disabled = false;
-        }
-
-        function pauseTimer() {
-            timerRunning = false;
-            clearInterval(timerInterval);
-            if (timerPulseDot) timerPulseDot.style.opacity = "0";
-            if (btnText) btnText.textContent = "继续专注";
-            if (iconPlay) iconPlay.classList.remove("hidden");
-            if (iconPause) iconPause.classList.add("hidden");
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            timerSeconds = 0;
-            updateTimerUI();
-            if (btnText) btnText.textContent = "开始专注";
-            if (btnSave) btnSave.disabled = true;
-        }
-
-        btnToggle?.addEventListener("click", () => {
-            if (timerRunning) pauseTimer();
-            else startTimer();
-        });
-
-        btnReset?.addEventListener("click", resetTimer);
-
-        btnSave?.addEventListener("click", () => {
-            if (timerSeconds < 30) {
-                alert("专注时长未满 30 秒，继续加油吧！");
-                return;
-            }
-            const mins = Math.max(1, Math.round(timerSeconds / 60));
-            const now = new Date();
-            const dateStr = now.toISOString().split("T")[0];
-            const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-            const subj = subjectSelect?.value || "综合研习";
-
-            const newSession: StudySession = {
-                id: `sess-${Date.now()}`,
-                date: dateStr,
-                time: timeStr,
-                durationMinutes: mins,
-                subject: subj,
-                mode: timerMode === "pomodoro" ? "番茄专注" : "自由计时"
-            };
-
-            sessions.unshift(newSession);
-            saveSessions(sessions);
-            resetTimer();
-            renderAllViews();
-        });
-
-        // 切换模式
-        modeStopwatch?.addEventListener("click", () => {
-            if (timerMode === "stopwatch") return;
-            resetTimer();
-            timerMode = "stopwatch";
-            modeStopwatch.className = "px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all";
-            modePomodoro!.className = "px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all";
-            pomoPills?.classList.add("hidden");
-            updateTimerUI();
-        });
-
-        modePomodoro?.addEventListener("click", () => {
-            if (timerMode === "pomodoro") return;
-            resetTimer();
-            timerMode = "pomodoro";
-            modePomodoro.className = "px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all";
-            modeStopwatch!.className = "px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all";
-            pomoPills?.classList.remove("hidden");
-            updateTimerUI();
-        });
-
-        // 设定番茄钟时长胶囊
-        document.querySelectorAll(".pomo-pill").forEach((btn) => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".pomo-pill").forEach((b) => {
-                    b.className = "pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent";
-                });
-                btn.className = "pomo-pill px-2.5 py-1 text-xs rounded-md bg-[var(--gh-l3)]/20 text-[var(--gh-l4)] font-semibold border border-[var(--gh-l3)]/40";
-                const mins = Number(btn.getAttribute("data-duration")) || 25;
-                pomoTargetSeconds = mins * 60;
-                resetTimer();
-            });
-        });
-
-        // 快捷补卡按键
-        function quickAddMinutes(mins: number) {
-            const now = new Date();
-            const dateStr = now.toISOString().split("T")[0];
-            const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-            const subj = subjectSelect?.value || "综合研习";
-
-            sessions.unshift({
-                id: `quick-${Date.now()}`,
-                date: dateStr,
-                time: timeStr,
-                durationMinutes: mins,
-                subject: subj,
-                mode: "快捷补卡"
-            });
-            saveSessions(sessions);
-            renderAllViews();
-        }
-
-        document.getElementById("quick-add-30m")?.addEventListener("click", () => quickAddMinutes(30));
-        document.getElementById("quick-add-1h")?.addEventListener("click", () => quickAddMinutes(60));
-
-        // 恢复样例数据
-        document.getElementById("reset-seed-data")?.addEventListener("click", () => {
-            if (confirm("是否恢复为预设的学期样例数据？")) {
-                localStorage.removeItem(STORAGE_KEY);
-                sessions = getStoredSessions();
-                renderAllViews();
-            }
-        });
-
-        // ── 统计数值计算 ────────────────────────────────────────────────
-        function renderSummaryStats() {
+        // 2. 统计核心指标渲染
+        function renderMetrics() {
             const todayStr = new Date().toISOString().split("T")[0];
-
             let totalMins = 0;
             let todayMins = 0;
 
-            // 本周一 00:00 时间戳
             const now = new Date();
-            const dayOfWeek = (now.getDay() + 6) % 7; // 周一为 0
+            const dayOfWeek = (now.getDay() + 6) % 7;
             const monday = new Date(now);
             monday.setDate(now.getDate() - dayOfWeek);
             monday.setHours(0, 0, 0, 0);
@@ -588,17 +519,13 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
             sessions.forEach((s) => {
                 totalMins += s.durationMinutes;
-                if (s.date === todayStr) {
-                    todayMins += s.durationMinutes;
-                }
+                if (s.date === todayStr) todayMins += s.durationMinutes;
                 const sDate = new Date(s.date);
-                if (sDate >= monday) {
-                    weekMins += s.durationMinutes;
-                }
+                if (sDate >= monday) weekMins += s.durationMinutes;
                 uniqueDates.add(s.date);
             });
 
-            // 计算 Streak 连续打卡天数
+            // 计算连续天数 Streak
             let streak = 0;
             let checkDate = new Date();
             while (true) {
@@ -607,7 +534,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     streak++;
                     checkDate.setDate(checkDate.getDate() - 1);
                 } else {
-                    // 如果今天还没打卡，允许从昨天算起
                     if (streak === 0) {
                         checkDate.setDate(checkDate.getDate() - 1);
                         const yesterdayStr = checkDate.toISOString().split("T")[0];
@@ -633,11 +559,11 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
             const summaryText = document.getElementById("heatmap-summary-text");
             if (summaryText) {
-                summaryText.textContent = `过去半年累计产生 ${(totalMins / 60).toFixed(1)} 小时学研沉淀 · 共记录 ${sessions.length} 次专注打卡`;
+                summaryText.textContent = `过去半年累计产生 ${(totalMins / 60).toFixed(1)} 小时学研沉淀 · 共记录 ${sessions.length} 次打卡`;
             }
         }
 
-        // ── 渲染 GitHub 贡献热力图 (Activity Heatmap) ───────────────────
+        // 3. GitHub 贡献热力图渲染
         function renderHeatmap() {
             const gridEl = document.getElementById("heatmap-grid");
             const monthsHeaderEl = document.getElementById("heatmap-months-header");
@@ -646,18 +572,14 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             gridEl.innerHTML = "";
             monthsHeaderEl.innerHTML = "";
 
-            // 聚合每日学时映射: date -> totalMinutes
             const dailyMap = new Map<string, number>();
             sessions.forEach((s) => {
                 dailyMap.set(s.date, (dailyMap.get(s.date) || 0) + s.durationMinutes);
             });
 
-            // 构造过去 24 周的日历天数网格
             const totalWeeks = 24;
             const now = new Date();
-            const currentDayOfWeek = (now.getDay() + 6) % 7; // 周一=0, 周日=6
-
-            // 计算网格起点（23 周前的周一）
+            const currentDayOfWeek = (now.getDay() + 6) % 7;
             const startDate = new Date(now);
             startDate.setDate(now.getDate() - currentDayOfWeek - (totalWeeks - 1) * 7);
 
@@ -677,7 +599,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     cur.setDate(startDate.getDate() + w * 7 + d);
                     const dateStr = cur.toISOString().split("T")[0];
 
-                    // 记录月份出现的位置
                     const mName = `${cur.getMonth() + 1}月`;
                     if (d === 0 && mName !== lastMonthLabel) {
                         lastMonthLabel = mName;
@@ -688,7 +609,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     cell.className = "gh-cell";
                     cell.setAttribute("data-date", dateStr);
 
-                    // 未来日期置空
                     if (cur > now) {
                         cell.style.opacity = "0.2";
                         cell.style.backgroundColor = "var(--gh-l0)";
@@ -699,7 +619,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     const mins = dailyMap.get(dateStr) || 0;
                     const hours = (mins / 60).toFixed(1);
 
-                    // GitHub 5 级贡献绿判定
                     let bg = "var(--gh-l0)";
                     if (mins > 0 && mins < 60) bg = "var(--gh-l1)";
                     else if (mins >= 60 && mins < 150) bg = "var(--gh-l2)";
@@ -708,8 +627,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 
                     cell.style.backgroundColor = bg;
 
-                    // 悬停气泡绑定
-                    cell.addEventListener("mouseenter", (e) => {
+                    cell.addEventListener("mouseenter", () => {
                         if (!tooltip || !ttDate || !ttContent) return;
                         const rect = cell.getBoundingClientRect();
                         ttDate.textContent = `${dateStr} (${["周日","周一","周二","周三","周四","周五","周六"][cur.getDay()]})`;
@@ -729,7 +647,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                 gridEl.appendChild(col);
             }
 
-            // 渲染月份顶部标注
             for (let w = 0; w < totalWeeks; w++) {
                 const labelSpan = document.createElement("div");
                 labelSpan.className = "w-[15.5px] text-center shrink-0";
@@ -738,346 +655,239 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             }
         }
 
-        // ── 渲染柱状图 (Daily, Weekly, Monthly, Subjects) ──────────────
-        let currentChartTab = "daily";
-
-        function renderChart() {
+        // 4. 多维时序柱状图绘制
+        function renderCharts() {
             const container = document.getElementById("chart-container");
             const caption = document.getElementById("chart-caption");
             if (!container) return;
-
             container.innerHTML = "";
 
             if (currentChartTab === "daily") {
-                renderDailyChart(container, caption);
+                if (caption) caption.textContent = "近 14 天每日研习学时 · 标线: 3.0h 目标 · 绿色高阶渐进高亮";
+                const days = 14;
+                const data: { date: string; label: string; mins: number; isToday: boolean }[] = [];
+                const dailyMap = new Map<string, number>();
+                sessions.forEach((s) => dailyMap.set(s.date, (dailyMap.get(s.date) || 0) + s.durationMinutes));
+
+                const todayStr = new Date().toISOString().split("T")[0];
+                let maxMins = 300;
+
+                for (let i = days - 1; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    const str = d.toISOString().split("T")[0];
+                    const mins = dailyMap.get(str) || 0;
+                    if (mins > maxMins) maxMins = mins;
+                    data.push({
+                        date: str,
+                        label: `${d.getMonth() + 1}-${d.getDate()}`,
+                        mins,
+                        isToday: str === todayStr
+                    });
+                }
+
+                const w = container.clientWidth || 600;
+                const h = container.clientHeight || 260;
+                const padL = 40, padR = 20, padT = 30, padB = 30;
+                const plotW = w - padL - padR;
+                const plotH = h - padT - padB;
+                const targetY = padT + plotH * (1 - Math.min(1, 180 / maxMins));
+                const barW = Math.max(14, Math.min(32, (plotW / days) * 0.65));
+
+                let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
+                    <defs>
+                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="var(--gh-l4)" />
+                            <stop offset="100%" stop-color="var(--gh-l2)" />
+                        </linearGradient>
+                        <linearGradient id="barGradToday" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#39d353" />
+                            <stop offset="100%" stop-color="#006d32" />
+                        </linearGradient>
+                    </defs>
+                    <line x1="${padL}" y1="${targetY}" x2="${w - padR}" y2="${targetY}" stroke="var(--gh-l4)" stroke-dasharray="4,4" opacity="0.35" stroke-width="1.2" />
+                    <text x="${w - padR}" y="${targetY - 5}" fill="var(--gh-l4)" font-size="10" text-anchor="end" font-family="monospace" opacity="0.8">Target 3.0h</text>
+                `;
+
+                data.forEach((item, idx) => {
+                    const cx = padL + (idx + 0.5) * (plotW / days);
+                    const barH = (item.mins / maxMins) * plotH;
+                    const by = padT + plotH - barH;
+                    const hours = (item.mins / 60).toFixed(1);
+
+                    svgHtml += `
+                        <g class="cursor-pointer">
+                            <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="4" fill="${item.isToday ? 'url(#barGradToday)' : 'url(#barGrad)'}" opacity="${item.mins > 0 ? (item.isToday ? 1 : 0.85) : 0.15}">
+                                <title>${item.date}: ${hours} 小时 (${item.mins} 分钟)</title>
+                            </rect>
+                            <text x="${cx}" y="${by - 6}" fill="${item.isToday ? 'var(--gh-l4)' : 'currentColor'}" font-size="10.5" font-weight="${item.isToday ? 'bold' : 'normal'}" font-family="monospace" text-anchor="middle" class="text-neutral-500 dark:text-neutral-400">
+                                ${item.mins > 0 ? hours + 'h' : ''}
+                            </text>
+                            <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="10.5" font-family="monospace" text-anchor="middle" class="${item.isToday ? 'font-bold text-[var(--gh-l4)]' : 'text-neutral-400'}">
+                                ${item.label}
+                            </text>
+                        </g>
+                    `;
+                });
+                svgHtml += `</svg>`;
+                container.innerHTML = svgHtml;
+
             } else if (currentChartTab === "weekly") {
-                renderWeeklyChart(container, caption);
+                if (caption) caption.textContent = "近 8 周累计学习时长对比 · 周度总学时与环比变化";
+                const weeks = 8;
+                const weekData: { label: string; mins: number }[] = [];
+                const now = new Date();
+                let maxMins = 1200;
+
+                for (let w = weeks - 1; w >= 0; w--) {
+                    const weekStart = new Date(now);
+                    weekStart.setDate(now.getDate() - (w * 7 + ((now.getDay() + 6) % 7)));
+                    weekStart.setHours(0, 0, 0, 0);
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 7);
+
+                    let total = 0;
+                    sessions.forEach((s) => {
+                        const d = new Date(s.date);
+                        if (d >= weekStart && d < weekEnd) total += s.durationMinutes;
+                    });
+                    if (total > maxMins) maxMins = total;
+                    weekData.push({ label: `第${w === 0 ? '本' : (8 - w)}周`, mins: total });
+                }
+
+                const w = container.clientWidth || 600;
+                const h = container.clientHeight || 260;
+                const padL = 40, padR = 20, padT = 30, padB = 30;
+                const plotW = w - padL - padR;
+                const plotH = h - padT - padB;
+                const barW = Math.max(20, Math.min(48, (plotW / weeks) * 0.55));
+
+                let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
+                    <defs>
+                        <linearGradient id="weekGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="var(--gh-l4)" />
+                            <stop offset="100%" stop-color="var(--gh-l2)" />
+                        </linearGradient>
+                    </defs>
+                `;
+                weekData.forEach((item, idx) => {
+                    const cx = padL + (idx + 0.5) * (plotW / weeks);
+                    const barH = (item.mins / maxMins) * plotH;
+                    const by = padT + plotH - barH;
+                    const hours = (item.mins / 60).toFixed(1);
+                    svgHtml += `
+                        <g class="cursor-pointer">
+                            <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="5" fill="url(#weekGrad)" opacity="0.9">
+                                <title>${item.label}: ${hours} 小时</title>
+                            </rect>
+                            <text x="${cx}" y="${by - 6}" fill="var(--gh-l4)" font-size="11" font-weight="bold" font-family="monospace" text-anchor="middle">${hours}h</text>
+                            <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="11" font-family="monospace" text-anchor="middle" class="text-neutral-400">${item.label}</text>
+                        </g>
+                    `;
+                });
+                svgHtml += `</svg>`;
+                container.innerHTML = svgHtml;
+
             } else if (currentChartTab === "monthly") {
-                renderMonthlyChart(container, caption);
+                if (caption) caption.textContent = "近 6 个月学期学时趋势 · 月度累计研习时间";
+                const monthData: { label: string; mins: number }[] = [];
+                const now = new Date();
+                let maxMins = 3000;
+
+                for (let m = 5; m >= 0; m--) {
+                    const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+                    const mStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}`;
+                    let total = 0;
+                    sessions.forEach((s) => {
+                        if (s.date.startsWith(mStr)) total += s.durationMinutes;
+                    });
+                    if (total > maxMins) maxMins = total;
+                    monthData.push({ label: `${d.getMonth() + 1}月`, mins: total });
+                }
+
+                const w = container.clientWidth || 600;
+                const h = container.clientHeight || 260;
+                const padL = 40, padR = 20, padT = 30, padB = 30;
+                const plotW = w - padL - padR;
+                const plotH = h - padT - padB;
+                const barW = Math.max(26, Math.min(60, (plotW / 6) * 0.5));
+
+                let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
+                    <defs>
+                        <linearGradient id="monthGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="var(--gh-l3)" />
+                            <stop offset="100%" stop-color="var(--gh-l1)" />
+                        </linearGradient>
+                    </defs>
+                `;
+                monthData.forEach((item, idx) => {
+                    const cx = padL + (idx + 0.5) * (plotW / 6);
+                    const barH = (item.mins / maxMins) * plotH;
+                    const by = padT + plotH - barH;
+                    const hours = (item.mins / 60).toFixed(1);
+                    svgHtml += `
+                        <g class="cursor-pointer">
+                            <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="6" fill="url(#monthGrad)" opacity="0.95">
+                                <title>${item.label}: ${hours} 小时</title>
+                            </rect>
+                            <text x="${cx}" y="${by - 6}" fill="var(--gh-l4)" font-size="11.5" font-weight="bold" font-family="monospace" text-anchor="middle">${hours}h</text>
+                            <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="11" font-family="monospace" text-anchor="middle" class="text-neutral-400">${item.label}</text>
+                        </g>
+                    `;
+                });
+                svgHtml += `</svg>`;
+                container.innerHTML = svgHtml;
+
             } else if (currentChartTab === "subjects") {
-                renderSubjectsChart(container, caption);
-            }
-        }
-
-        // 1. 近 14 天每日柱状图
-        function renderDailyChart(container: HTMLElement, caption: HTMLElement | null) {
-            if (caption) caption.textContent = "近 14 天每日研习学时 · 标线: 3.0h 目标 · 绿色高阶渐进高亮";
-
-            const days = 14;
-            const data: { date: string; label: string; mins: number; isToday: boolean }[] = [];
-            const dailyMap = new Map<string, number>();
-            sessions.forEach((s) => {
-                dailyMap.set(s.date, (dailyMap.get(s.date) || 0) + s.durationMinutes);
-            });
-
-            const todayStr = new Date().toISOString().split("T")[0];
-            let maxMins = 300; // 最少 5h 标尺
-
-            for (let i = days - 1; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                const str = d.toISOString().split("T")[0];
-                const mins = dailyMap.get(str) || 0;
-                if (mins > maxMins) maxMins = mins;
-                data.push({
-                    date: str,
-                    label: `${d.getMonth() + 1}-${d.getDate()}`,
-                    mins,
-                    isToday: str === todayStr
-                });
-            }
-
-            // SVG 绘制
-            const w = container.clientWidth || 600;
-            const h = container.clientHeight || 260;
-            const padL = 40, padR = 20, padT = 30, padB = 30;
-            const plotW = w - padL - padR;
-            const plotH = h - padT - padB;
-
-            const targetY = padT + plotH * (1 - Math.min(1, 180 / maxMins));
-            const barW = Math.max(14, Math.min(32, (plotW / days) * 0.65));
-
-            let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
-                <defs>
-                    <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--gh-l4)" />
-                        <stop offset="100%" stop-color="var(--gh-l2)" />
-                    </linearGradient>
-                    <linearGradient id="barGradToday" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#39d353" />
-                        <stop offset="100%" stop-color="#006d32" />
-                    </linearGradient>
-                </defs>
-                <!-- 3h 目标基准参考线 -->
-                <line x1="${padL}" y1="${targetY}" x2="${w - padR}" y2="${targetY}" stroke="var(--gh-l4)" stroke-dasharray="4,4" opacity="0.35" stroke-width="1.2" />
-                <text x="${w - padR}" y="${targetY - 5}" fill="var(--gh-l4)" font-size="10" text-anchor="end" font-family="monospace" opacity="0.8">Target 3.0h</text>
-            `;
-
-            data.forEach((item, idx) => {
-                const cx = padL + (idx + 0.5) * (plotW / days);
-                const barH = (item.mins / maxMins) * plotH;
-                const by = padT + plotH - barH;
-                const hours = (item.mins / 60).toFixed(1);
-
-                // 柱状体
-                svgHtml += `
-                    <g class="group cursor-pointer">
-                        <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="4" fill="${item.isToday ? 'url(#barGradToday)' : 'url(#barGrad)'}" opacity="${item.mins > 0 ? (item.isToday ? 1 : 0.85) : 0.15}">
-                            <title>${item.date}: ${hours} 小时 (${item.mins} 分钟)</title>
-                        </rect>
-                        <!-- 柱顶数值 -->
-                        <text x="${cx}" y="${by - 6}" fill="${item.isToday ? 'var(--gh-l4)' : 'currentColor'}" font-size="10.5" font-weight="${item.isToday ? 'bold' : 'normal'}" font-family="monospace" text-anchor="middle" class="text-neutral-500 dark:text-neutral-400">
-                            ${item.mins > 0 ? hours + 'h' : ''}
-                        </text>
-                        <!-- X 轴刻度 -->
-                        <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="10.5" font-family="monospace" text-anchor="middle" class="${item.isToday ? 'font-bold text-[var(--gh-l4)]' : 'text-neutral-400'}">
-                            ${item.label}
-                        </text>
-                    </g>
-                `;
-            });
-
-            svgHtml += `</svg>`;
-            container.innerHTML = svgHtml;
-        }
-
-        // 2. 近 8 周柱状图
-        function renderWeeklyChart(container: HTMLElement, caption: HTMLElement | null) {
-            if (caption) caption.textContent = "近 8 周累计学习时长对比 · 周均投入与环比强度洞察";
-
-            const weeks = 8;
-            const weekData: { label: string; mins: number }[] = [];
-            const now = new Date();
-            let maxMins = 1200; // 20h
-
-            for (let w = weeks - 1; w >= 0; w--) {
-                const weekStart = new Date(now);
-                weekStart.setDate(now.getDate() - (w * 7 + ((now.getDay() + 6) % 7)));
-                weekStart.setHours(0, 0, 0, 0);
-
-                const weekEnd = new Date(weekStart);
-                weekEnd.setDate(weekStart.getDate() + 7);
-
+                if (caption) caption.textContent = "各研习科目时间投入占比 · 均衡发展与重点攻坚";
+                const subjMap = new Map<string, number>();
                 let total = 0;
                 sessions.forEach((s) => {
-                    const d = new Date(s.date);
-                    if (d >= weekStart && d < weekEnd) {
-                        total += s.durationMinutes;
-                    }
+                    subjMap.set(s.subject, (subjMap.get(s.subject) || 0) + s.durationMinutes);
+                    total += s.durationMinutes;
                 });
 
-                if (total > maxMins) maxMins = total;
-                weekData.push({
-                    label: `第${w === 0 ? '本' : (8 - w)}周`,
-                    mins: total
+                const sorted = Array.from(subjMap.entries()).sort((a, b) => b[1] - a[1]);
+                const greenPalette = ["var(--gh-l4)", "var(--gh-l3)", "var(--gh-l2)", "var(--gh-l1)", "#4ade80", "#86efac"];
+
+                let html = `<div class="h-full flex flex-col justify-center px-4">
+                    <div class="w-full h-5 rounded-full overflow-hidden flex bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 mb-6">`;
+                sorted.forEach(([subj, mins], idx) => {
+                    const pct = total > 0 ? ((mins / total) * 100).toFixed(1) : "0";
+                    html += `<div style="width: ${pct}%; background-color: ${greenPalette[idx % greenPalette.length]};" title="${subj}: ${pct}%" class="h-full"></div>`;
                 });
-            }
-
-            const w = container.clientWidth || 600;
-            const h = container.clientHeight || 260;
-            const padL = 40, padR = 20, padT = 30, padB = 30;
-            const plotW = w - padL - padR;
-            const plotH = h - padT - padB;
-            const barW = Math.max(20, Math.min(48, (plotW / weeks) * 0.55));
-
-            let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
-                <defs>
-                    <linearGradient id="weekGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--gh-l4)" />
-                        <stop offset="100%" stop-color="var(--gh-l2)" />
-                    </linearGradient>
-                </defs>
-            `;
-
-            weekData.forEach((item, idx) => {
-                const cx = padL + (idx + 0.5) * (plotW / weeks);
-                const barH = (item.mins / maxMins) * plotH;
-                const by = padT + plotH - barH;
-                const hours = (item.mins / 60).toFixed(1);
-
-                svgHtml += `
-                    <g class="cursor-pointer">
-                        <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="5" fill="url(#weekGrad)" opacity="0.9">
-                            <title>${item.label}: ${hours} 小时</title>
-                        </rect>
-                        <text x="${cx}" y="${by - 6}" fill="var(--gh-l4)" font-size="11" font-weight="bold" font-family="monospace" text-anchor="middle">
-                            ${hours}h
-                        </text>
-                        <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="11" font-family="monospace" text-anchor="middle" class="text-neutral-400">
-                            ${item.label}
-                        </text>
-                    </g>
-                `;
-            });
-
-            svgHtml += `</svg>`;
-            container.innerHTML = svgHtml;
-        }
-
-        // 3. 近 6 个月柱状汇总
-        function renderMonthlyChart(container: HTMLElement, caption: HTMLElement | null) {
-            if (caption) caption.textContent = "近 6 个月学期学时趋势 · 月度累计研习时间";
-
-            const monthData: { label: string; mins: number }[] = [];
-            const now = new Date();
-            let maxMins = 3000; // 50h
-
-            for (let m = 5; m >= 0; m--) {
-                const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
-                const year = d.getFullYear();
-                const month = d.getMonth();
-                const mStr = `${year}-${(month + 1).toString().padStart(2, "0")}`;
-
-                let total = 0;
-                sessions.forEach((s) => {
-                    if (s.date.startsWith(mStr)) {
-                        total += s.durationMinutes;
-                    }
-                });
-
-                if (total > maxMins) maxMins = total;
-                monthData.push({
-                    label: `${month + 1}月`,
-                    mins: total
-                });
-            }
-
-            const w = container.clientWidth || 600;
-            const h = container.clientHeight || 260;
-            const padL = 40, padR = 20, padT = 30, padB = 30;
-            const plotW = w - padL - padR;
-            const plotH = h - padT - padB;
-            const barW = Math.max(26, Math.min(60, (plotW / 6) * 0.5));
-
-            let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" class="overflow-visible select-none">
-                <defs>
-                    <linearGradient id="monthGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--gh-l3)" />
-                        <stop offset="100%" stop-color="var(--gh-l1)" />
-                    </linearGradient>
-                </defs>
-            `;
-
-            monthData.forEach((item, idx) => {
-                const cx = padL + (idx + 0.5) * (plotW / 6);
-                const barH = (item.mins / maxMins) * plotH;
-                const by = padT + plotH - barH;
-                const hours = (item.mins / 60).toFixed(1);
-
-                svgHtml += `
-                    <g class="cursor-pointer">
-                        <rect class="bar-rect" x="${cx - barW / 2}" y="${by}" width="${barW}" height="${Math.max(4, barH)}" rx="6" fill="url(#monthGrad)" opacity="0.95">
-                            <title>${item.label}: ${hours} 小时</title>
-                        </rect>
-                        <text x="${cx}" y="${by - 6}" fill="var(--gh-l4)" font-size="11.5" font-weight="bold" font-family="monospace" text-anchor="middle">
-                            ${hours}h
-                        </text>
-                        <text x="${cx}" y="${h - 8}" fill="currentColor" font-size="11" font-family="monospace" text-anchor="middle" class="text-neutral-400">
-                            ${item.label}
-                        </text>
-                    </g>
-                `;
-            });
-
-            svgHtml += `</svg>`;
-            container.innerHTML = svgHtml;
-        }
-
-        // 4. 学科分布占比分析
-        function renderSubjectsChart(container: HTMLElement, caption: HTMLElement | null) {
-            if (caption) caption.textContent = "各研习科目时间投入占比 · 均衡发展与重点攻坚";
-
-            const subjMap = new Map<string, number>();
-            let total = 0;
-            sessions.forEach((s) => {
-                subjMap.set(s.subject, (subjMap.get(s.subject) || 0) + s.durationMinutes);
-                total += s.durationMinutes;
-            });
-
-            const sorted = Array.from(subjMap.entries()).sort((a, b) => b[1] - a[1]);
-            const greenPalette = [
-                "var(--gh-l4)",
-                "var(--gh-l3)",
-                "var(--gh-l2)",
-                "var(--gh-l1)",
-                "#4ade80",
-                "#86efac"
-            ];
-
-            let html = `
-                <div class="h-full flex flex-col justify-center px-4">
-                    <!-- 彩色堆叠进度条 -->
-                    <div class="w-full h-5 rounded-full overflow-hidden flex bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 mb-6">
-            `;
-
-            sorted.forEach(([subj, mins], idx) => {
-                const pct = total > 0 ? ((mins / total) * 100).toFixed(1) : "0";
-                const color = greenPalette[idx % greenPalette.length];
-                html += `<div style="width: ${pct}%; background-color: ${color};" title="${subj}: ${pct}%" class="h-full transition-all"></div>`;
-            });
-
-            html += `</div>
-                    <!-- 分类清单网格 -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            `;
-
-            sorted.forEach(([subj, mins], idx) => {
-                const pct = total > 0 ? ((mins / total) * 100).toFixed(1) : "0";
-                const hours = (mins / 60).toFixed(1);
-                const color = greenPalette[idx % greenPalette.length];
-                html += `
-                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 text-xs">
-                        <div class="flex items-center gap-2 truncate">
-                            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${color};"></span>
-                            <span class="font-medium text-black/80 dark:text-white/80 truncate">${subj}</span>
+                html += `</div><div class="grid grid-cols-1 md:grid-cols-2 gap-3">`;
+                sorted.forEach(([subj, mins], idx) => {
+                    const pct = total > 0 ? ((mins / total) * 100).toFixed(1) : "0";
+                    const hours = (mins / 60).toFixed(1);
+                    html += `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 text-xs">
+                            <div class="flex items-center gap-2 truncate">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${greenPalette[idx % greenPalette.length]};"></span>
+                                <span class="font-medium text-black/80 dark:text-white/80 truncate">${subj}</span>
+                            </div>
+                            <div class="font-mono text-neutral-400 shrink-0">
+                                <span class="font-bold text-black/90 dark:text-white/90 mr-1">${hours}h</span>
+                                <span>(${pct}%)</span>
+                            </div>
                         </div>
-                        <div class="font-mono text-neutral-400 shrink-0">
-                            <span class="font-bold text-black/90 dark:text-white/90 mr-1">${hours}h</span>
-                            <span>(${pct}%)</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += `</div></div>`;
-            container.innerHTML = html;
+                    `;
+                });
+                html += `</div></div>`;
+                container.innerHTML = html;
+            }
         }
 
-        // Tab 切换监听
-        const tabs = [
-            { id: "chart-tab-daily", name: "daily" },
-            { id: "chart-tab-weekly", name: "weekly" },
-            { id: "chart-tab-monthly", name: "monthly" },
-            { id: "chart-tab-subjects", name: "subjects" }
-        ];
-
-        tabs.forEach((t) => {
-            document.getElementById(t.id)?.addEventListener("click", () => {
-                currentChartTab = t.name;
-                tabs.forEach((other) => {
-                    const btn = document.getElementById(other.id);
-                    if (other.name === currentChartTab) {
-                        btn!.className = "chart-tab-btn px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all";
-                    } else {
-                        btn!.className = "chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all";
-                    }
-                });
-                renderChart();
-            });
-        });
-
-        // ── 渲染近期打卡记录列表 ────────────────────────────────────────
-        function renderSessionLogTable() {
+        // 5. 渲染流水日志
+        function renderLogs() {
             const tbody = document.getElementById("session-log-tbody");
             if (!tbody) return;
             tbody.innerHTML = "";
-
             const displayList = sessions.slice(0, 10);
             if (displayList.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-neutral-400">暂无研习打卡记录，开启你的第一次专注吧！</td></tr>`;
                 return;
             }
-
             displayList.forEach((s) => {
                 const tr = document.createElement("tr");
                 tr.className = "hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors";
@@ -1087,49 +897,216 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     <td class="py-2.5 px-3 font-bold text-[var(--gh-l4)]">${s.durationMinutes} 分钟</td>
                     <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[11px] bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">${s.mode}</span></td>
                     <td class="py-2.5 px-3 text-right">
-                        <button data-id="${s.id}" class="btn-delete-sess text-neutral-400 hover:text-red-500 transition-colors">删除</button>
+                        <button data-id="${s.id}" class="btn-delete-sess text-neutral-400 hover:text-red-500 transition-colors cursor-pointer">删除</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
 
-            tbody.querySelectorAll(".btn-delete-sess").forEach((b) => {
-                b.addEventListener("click", (e) => {
-                    const sid = (e.currentTarget as HTMLElement).getAttribute("data-id");
-                    if (sid && confirm("确定删除该条专注记录吗？")) {
-                        sessions = sessions.filter((x) => x.id !== sid);
-                        saveSessions(sessions);
-                        renderAllViews();
-                    }
-                });
+        renderMetrics();
+        renderHeatmap();
+        renderCharts();
+        renderLogs();
+    }
+
+    // ── 全局事件代理 (Event Delegation) 确保在任何页面载入/Swup切页下100%响应 ──
+    document.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        // 1. 开始/暂停计时按键
+        const btnToggle = target.closest("#timer-btn-toggle");
+        if (btnToggle) {
+            e.preventDefault();
+            if (TimerCore.running) {
+                TimerCore.pause();
+            } else {
+                TimerCore.start();
+            }
+            return;
+        }
+
+        // 2. 结算打卡
+        const btnSave = target.closest("#timer-btn-save");
+        if (btnSave) {
+            e.preventDefault();
+            if (TimerCore.seconds < 15) {
+                alert("专注时长未满 15 秒，继续加油吧！");
+                return;
+            }
+            const mins = Math.max(1, Math.round(TimerCore.seconds / 60));
+            const now = new Date();
+            const dateStr = now.toISOString().split("T")[0];
+            const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+            const subjectSelect = document.getElementById("timer-subject") as HTMLSelectElement | null;
+            const subj = subjectSelect?.value || "综合研习";
+
+            const sessions = getStoredSessions();
+            sessions.unshift({
+                id: `sess-${Date.now()}`,
+                date: dateStr,
+                time: timeStr,
+                durationMinutes: mins,
+                subject: subj,
+                mode: TimerCore.mode === "pomodoro" ? "番茄专注" : "自由计时"
             });
+            saveSessions(sessions);
+            TimerCore.reset();
+            mountStudyViews();
+            return;
         }
 
-        function renderAllViews() {
-            renderSummaryStats();
-            renderHeatmap();
-            renderChart();
-            renderSessionLogTable();
+        // 3. 重置计时器
+        const btnReset = target.closest("#timer-btn-reset");
+        if (btnReset) {
+            e.preventDefault();
+            TimerCore.reset();
+            return;
         }
 
-        renderAllViews();
+        // 4. 模式切换
+        const btnModeStopwatch = target.closest("#mode-stopwatch");
+        if (btnModeStopwatch) {
+            e.preventDefault();
+            if (TimerCore.mode === "stopwatch") return;
+            TimerCore.reset();
+            TimerCore.mode = "stopwatch";
+            TimerCore.saveState();
+            btnModeStopwatch.className = "px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all cursor-pointer";
+            const btnPomo = document.getElementById("mode-pomodoro");
+            if (btnPomo) btnPomo.className = "px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer";
+            document.getElementById("pomo-duration-pills")?.classList.add("hidden");
+            TimerCore.syncUI();
+            return;
+        }
 
-        // 窗口 resize 重新适配柱状图
-        let resizeTimer: any = null;
-        window.addEventListener("resize", () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                renderChart();
-            }, 100);
+        const btnModePomo = target.closest("#mode-pomodoro");
+        if (btnModePomo) {
+            e.preventDefault();
+            if (TimerCore.mode === "pomodoro") return;
+            TimerCore.reset();
+            TimerCore.mode = "pomodoro";
+            TimerCore.saveState();
+            btnModePomo.className = "px-3 py-1 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all cursor-pointer";
+            const btnSw = document.getElementById("mode-stopwatch");
+            if (btnSw) btnSw.className = "px-3 py-1 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer";
+            document.getElementById("pomo-duration-pills")?.classList.remove("hidden");
+            TimerCore.syncUI();
+            return;
+        }
+
+        // 5. 番茄钟预设时长胶囊
+        const pomoPill = target.closest(".pomo-pill");
+        if (pomoPill) {
+            e.preventDefault();
+            document.querySelectorAll(".pomo-pill").forEach((b) => {
+                b.className = "pomo-pill px-2.5 py-1 text-xs rounded-md bg-black/5 dark:bg-white/5 text-neutral-500 hover:text-black dark:hover:text-white border border-transparent cursor-pointer";
+            });
+            pomoPill.className = "pomo-pill px-2.5 py-1 text-xs rounded-md bg-[var(--gh-l3)]/20 text-[var(--gh-l4)] font-semibold border border-[var(--gh-l3)]/40 cursor-pointer";
+            const duration = Number(pomoPill.getAttribute("data-duration")) || 25;
+            TimerCore.pomoTargetSeconds = duration * 60;
+            TimerCore.reset();
+            return;
+        }
+
+        // 6. 快捷补卡
+        const btn30m = target.closest("#quick-add-30m");
+        const btn1h = target.closest("#quick-add-1h");
+        if (btn30m || btn1h) {
+            e.preventDefault();
+            const mins = btn1h ? 60 : 30;
+            const now = new Date();
+            const dateStr = now.toISOString().split("T")[0];
+            const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+            const subjectSelect = document.getElementById("timer-subject") as HTMLSelectElement | null;
+            const subj = subjectSelect?.value || "综合研习";
+
+            const sessions = getStoredSessions();
+            sessions.unshift({
+                id: `quick-${Date.now()}`,
+                date: dateStr,
+                time: timeStr,
+                durationMinutes: mins,
+                subject: subj,
+                mode: "快捷补卡"
+            });
+            saveSessions(sessions);
+            mountStudyViews();
+            return;
+        }
+
+        // 7. 恢复样例数据
+        const btnResetSeed = target.closest("#reset-seed-data");
+        if (btnResetSeed) {
+            e.preventDefault();
+            if (confirm("是否恢复为预设的学期完整打卡样例数据？")) {
+                localStorage.removeItem(STORAGE_KEY);
+                mountStudyViews();
+            }
+            return;
+        }
+
+        // 8. 柱状图 Tab 切换
+        const chartTabBtn = target.closest(".chart-tab-btn");
+        if (chartTabBtn) {
+            e.preventDefault();
+            const tab = chartTabBtn.getAttribute("data-tab") || "daily";
+            currentChartTab = tab;
+            document.querySelectorAll(".chart-tab-btn").forEach((b) => {
+                b.className = "chart-tab-btn px-3 py-1.5 rounded-lg text-neutral-500 hover:text-black dark:hover:text-white transition-all cursor-pointer";
+            });
+            chartTabBtn.className = "chart-tab-btn px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-semibold transition-all cursor-pointer";
+            mountStudyViews();
+            return;
+        }
+
+        // 9. 删除单条打卡记录
+        const btnDel = target.closest(".btn-delete-sess");
+        if (btnDel) {
+            e.preventDefault();
+            const sid = btnDel.getAttribute("data-id");
+            if (sid && confirm("确定删除该条专注记录吗？")) {
+                let sessions = getStoredSessions();
+                sessions = sessions.filter((x) => x.id !== sid);
+                saveSessions(sessions);
+                mountStudyViews();
+            }
+            return;
+        }
+    });
+
+    // 绑定生命周期：确保 Swup 切页与直达页面均能完美装载
+    function tryMount() {
+        if (window.location.pathname.includes("/study")) {
+            mountStudyViews();
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", tryMount);
+    } else {
+        tryMount();
+    }
+
+    // @ts-ignore
+    if (window.swup?.hooks) {
+        // @ts-ignore
+        window.swup.hooks.on("page:view", tryMount);
+        // @ts-ignore
+        window.swup.hooks.on("content:replace", tryMount);
+    } else {
+        document.addEventListener("swup:enable", () => {
+            // @ts-ignore
+            window.swup?.hooks?.on("page:view", tryMount);
+            // @ts-ignore
+            window.swup?.hooks?.on("content:replace", tryMount);
         });
     }
 
-    // 页面初次加载与 Swup 导航无缝绑定
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initStudyDashboard);
-    } else {
-        initStudyDashboard();
-    }
-
-    document.addEventListener("swup:page:view", initStudyDashboard);
+    window.addEventListener("resize", () => {
+        if (window.location.pathname.includes("/study")) {
+            mountStudyViews();
+        }
+    });
 </script>
