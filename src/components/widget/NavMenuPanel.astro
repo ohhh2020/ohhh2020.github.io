@@ -50,6 +50,14 @@ const links = Astro.props.links;
                 <span class="w-2 h-2 rounded-full bg-[#C25934]"></span>
                 <span>暖白画册</span>
             </button>
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="classic-dark">
+                <span class="w-2 h-2 rounded-full bg-[#4C8DF6]"></span>
+                <span>极简纯黑</span>
+            </button>
+            <button type="button" class="mobile-preset-btn text-xs px-2 py-1.5 rounded-md flex items-center gap-1.5 bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:scale-95 transition-all text-75" data-preset="classic-light">
+                <span class="w-2 h-2 rounded-full bg-[#2563EB]"></span>
+                <span>极简纯白</span>
+            </button>
         </div>
     </div>
 </div>
@@ -60,7 +68,7 @@ const links = Astro.props.links;
             btn.addEventListener('click', () => {
                 const preset = btn.getAttribute('data-preset');
                 if (preset) {
-                    const isDark = preset === 'obsidian-dark' || preset === 'warm-dark';
+                    const isDark = preset === 'obsidian-dark' || preset === 'warm-dark' || preset === 'classic-dark';
                     const root = document.documentElement;
                     root.setAttribute('data-prism-preset', preset);
                     if (isDark) {

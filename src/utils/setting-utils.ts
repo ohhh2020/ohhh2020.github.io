@@ -12,6 +12,8 @@ export const PRISM_PRESETS = [
 	"warm-dark",
 	"daylight-crystal",
 	"warm-alabaster",
+	"classic-dark",
+	"classic-light",
 ] as const;
 
 export type PrismPreset = (typeof PRISM_PRESETS)[number];
@@ -48,7 +50,7 @@ export function getStoredPrismPreset(): PrismPreset {
 
 export function setPrismPreset(preset: PrismPreset): void {
 	localStorage.setItem("prism-preset", preset);
-	const isDark = preset === "obsidian-dark" || preset === "warm-dark";
+	const isDark = preset === "obsidian-dark" || preset === "warm-dark" || preset === "classic-dark";
 	localStorage.setItem("theme", isDark ? "dark" : "light");
 
 	const root = document.documentElement;
@@ -69,6 +71,8 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 			root.classList.remove("dark");
 			if (currentPreset === "obsidian-dark" || currentPreset === "warm-dark") {
 				root.setAttribute("data-prism-preset", "daylight-crystal");
+			} else if (currentPreset === "classic-dark") {
+				root.setAttribute("data-prism-preset", "classic-light");
 			} else {
 				root.setAttribute("data-prism-preset", currentPreset);
 			}
@@ -77,6 +81,8 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 			root.classList.add("dark");
 			if (currentPreset === "daylight-crystal" || currentPreset === "warm-alabaster") {
 				root.setAttribute("data-prism-preset", "obsidian-dark");
+			} else if (currentPreset === "classic-light") {
+				root.setAttribute("data-prism-preset", "classic-dark");
 			} else {
 				root.setAttribute("data-prism-preset", currentPreset);
 			}

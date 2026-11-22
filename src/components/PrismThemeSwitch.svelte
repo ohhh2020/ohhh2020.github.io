@@ -53,6 +53,26 @@ const PRESETS: PresetOption[] = [
 		accent: "#C25934",
 		border: "rgba(42,32,20,0.12)",
 	},
+	{
+		id: "classic-dark",
+		name: "极简纯黑",
+		sub: "经典极简原皮 · 极速长文无卡顿",
+		isDark: true,
+		bg: "#0A0A0C",
+		card: "#121316",
+		accent: "#4C8DF6",
+		border: "rgba(255,255,255,0.08)",
+	},
+	{
+		id: "classic-light",
+		name: "极简纯白",
+		sub: "经典极简原皮 · 护眼极速看长文",
+		isDark: false,
+		bg: "#F9FAFB",
+		card: "#FFFFFF",
+		accent: "#2563EB",
+		border: "rgba(0,0,0,0.08)",
+	},
 ];
 
 let currentPreset = "obsidian-dark";
@@ -192,7 +212,7 @@ $: activePresetInfo = PRESETS.find((p) => p.id === currentPreset) || PRESETS[0];
                     <span class="w-2.5 h-2.5 rounded-full" style="background: linear-gradient(135deg, #4c8df6, #9b72cb, #ea4335, #f2b84b);"></span>
                     <span class="font-bold text-xs tracking-wide text-90 uppercase">黑曜棱镜 · 光学预设</span>
                 </div>
-                <span class="text-[10px] text-50 px-1.5 py-0.5 rounded bg-[var(--btn-regular-bg)]">4-Stop</span>
+                <span class="text-[10px] text-50 px-1.5 py-0.5 rounded bg-[var(--btn-regular-bg)]">6-Preset</span>
             </div>
 
             <!-- 4 Flagship Presets List -->

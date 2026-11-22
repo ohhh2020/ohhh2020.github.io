@@ -472,3 +472,44 @@ pre {
     display: block;
     z-index: 1;
 }
+
+/* ── 经典极简原皮性能调优 (Classic Minimalist Zero-GPU Optimization) ── */
+:root[data-prism-preset="classic-dark"],
+:root[data-prism-preset="classic-light"] {
+    /* 彻底移除背景光泽与多层合成，回归纯色零开销 */
+    --ag-cs-sheen: none !important;
+}
+
+:root[data-prism-preset="classic-dark"] .ag-v2-ripple-backdrop,
+:root[data-prism-preset="classic-light"] .ag-v2-ripple-backdrop,
+:root[data-prism-preset="classic-dark"] .prism-film-grain,
+:root[data-prism-preset="classic-light"] .prism-film-grain,
+:root[data-prism-preset="classic-dark"] .prism-ambient-glow,
+:root[data-prism-preset="classic-light"] .prism-ambient-glow {
+    display: none !important;
+}
+
+:root[data-prism-preset="classic-dark"] .card-base,
+:root[data-prism-preset="classic-light"] .card-base,
+:root[data-prism-preset="classic-dark"] .float-panel,
+:root[data-prism-preset="classic-light"] .float-panel,
+:root[data-prism-preset="classic-dark"] .ag-v2-titlebar,
+:root[data-prism-preset="classic-light"] .ag-v2-titlebar {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: var(--card-bg) !important;
+    background-image: none !important;
+}
+
+:root[data-prism-preset="classic-dark"] .card-base::before,
+:root[data-prism-preset="classic-light"] .card-base::before,
+:root[data-prism-preset="classic-dark"] .ag-prism-rim::before,
+:root[data-prism-preset="classic-light"] .ag-prism-rim::before {
+    display: none !important;
+}
+
+/* 长文档性能极速优化：跳过视口外大篇幅 KaTeX 公式与段落排版计算 */
+.custom-md > * + * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 80px;
+}
