@@ -42,6 +42,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                 <!-- 学科/项目下拉选择器 (图 1 中的 '全部项目 ▾') -->
                 <select id="ag-filter-subject" class="px-2.5 py-1 text-xs rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black/80 dark:text-white/80 focus:outline-none focus:border-blue-500 cursor-pointer transition-colors">
                     <option value="all">全部项目 / 科目</option>
+                    <option value="强化学习 (RL / PPO)">🤖 强化学习 (RL / PPO)</option>
                     <option value="人工智能数学方法">🧮 人工智能数学方法</option>
                     <option value="概率论与数理统计">📊 概率论与数理统计</option>
                     <option value="主成分分析 (PCA)">📉 主成分分析 (PCA)</option>
@@ -64,48 +65,46 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             </div>
         </div>
 
-        <!-- 6 项核心指标 HUD (3 列 x 2 行，1:1 还原图 1 中的 6 个指标卡) -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-3 mb-5" id="ag-stats-hud">
-            <!-- 1. 会话数 (专注打卡 Session 数量) -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">会话数</div>
-                <div id="stat-sessions-count" class="text-xl md:text-2xl font-extrabold text-black/90 dark:text-white/90 font-mono">16</div>
+        <!-- 6 项核心指标 HUD (3 列 x 2 行，1:1 还原图 1 中的紧凑整体表格) -->
+        <div class="grid grid-cols-3 grid-rows-2 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-[#12141c] divide-x divide-y divide-black/10 dark:divide-white/10 mb-5 text-left" id="ag-stats-hud">
+            <!-- 1. 会话数 -->
+            <div class="p-3 md:p-3.5">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">会话数</div>
+                <div id="stat-sessions-count" class="text-base md:text-xl font-bold text-black/90 dark:text-white/95 font-mono">16</div>
             </div>
 
-            <!-- 2. 消息数 (累计打卡频次/颗粒度记录) -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">打卡记录数</div>
-                <div id="stat-total-records" class="text-xl md:text-2xl font-extrabold text-black/90 dark:text-white/90 font-mono">696</div>
+            <!-- 2. 消息数 -->
+            <div class="p-3 md:p-3.5">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">消息数</div>
+                <div id="stat-total-records" class="text-base md:text-xl font-bold text-black/90 dark:text-white/95 font-mono">696</div>
             </div>
 
-            <!-- 3. Token 总量 / 研习学时总量 -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">研习学时总量</div>
+            <!-- 3. Token 总量 -->
+            <div class="p-3 md:p-3.5">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">Token 总量</div>
                 <div class="flex items-baseline gap-1">
-                    <span id="stat-total-hours" class="text-xl md:text-2xl font-extrabold text-blue-500 font-mono">146.5</span>
-                    <span class="text-xs text-neutral-400 font-mono font-medium">h</span>
+                    <span id="stat-total-hours" class="text-base md:text-xl font-bold text-blue-500 dark:text-blue-400 font-mono">61.6M</span>
                 </div>
             </div>
 
             <!-- 4. 活跃天数 -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">活跃天数</div>
+            <div class="p-3 md:p-3.5">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">活跃天数</div>
                 <div class="flex items-baseline gap-1">
-                    <span id="stat-active-days" class="text-xl md:text-2xl font-extrabold text-black/90 dark:text-white/90 font-mono">9</span>
-                    <span class="text-xs text-neutral-400 font-mono font-medium">天</span>
+                    <span id="stat-active-days" class="text-base md:text-xl font-bold text-black/90 dark:text-white/95 font-mono">9</span>
                 </div>
             </div>
 
-            <!-- 5. 缓存命中率 / 专注达标率 -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">习惯达标率</div>
-                <div id="stat-target-rate" class="text-xl md:text-2xl font-extrabold text-black/90 dark:text-white/90 font-mono">90.1%</div>
+            <!-- 5. 缓存命中率 -->
+            <div class="p-3 md:p-3.5">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">缓存命中率</div>
+                <div id="stat-target-rate" class="text-base md:text-xl font-bold text-black/90 dark:text-white/95 font-mono">90.1%</div>
             </div>
 
-            <!-- 6. 最常用模型 / 最常研习科目 -->
-            <div class="p-3.5 rounded-xl bg-black/[0.025] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] truncate">
-                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-1">最常研习科目</div>
-                <div id="stat-top-subject" class="text-xs md:text-sm font-bold text-black/90 dark:text-white/90 truncate font-mono mt-1">人工智能数学方法</div>
+            <!-- 6. 最常用模型 -->
+            <div class="p-3 md:p-3.5 truncate">
+                <div class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-0.5">最常用模型</div>
+                <div id="stat-top-subject" class="text-[11px] md:text-sm font-bold text-black/90 dark:text-white/95 truncate font-mono">Gemini 3.8 Flash (High)</div>
             </div>
         </div>
 
@@ -123,34 +122,19 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     </filter>
                 </defs>
                 <!-- 椭圆星轨：虚线主轨道与细实线引力场 (完全按照图 2 的倾角与曲度呈现) -->
-                <ellipse cx="44%" cy="48%" rx="48%" ry="45%" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" stroke-dasharray="4 4" class="dark:stroke-white/10 stroke-black/10"/>
-                <ellipse cx="44%" cy="48%" rx="48%" ry="45%" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" class="dark:stroke-white/5 stroke-black/5"/>
+                <ellipse cx="46%" cy="49%" rx="47%" ry="44%" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" stroke-dasharray="3 4" class="dark:stroke-white/10 stroke-black/10"/>
+                <ellipse cx="46%" cy="49%" rx="47%" ry="44%" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" class="dark:stroke-white/5 stroke-black/5"/>
                 <!-- 轨道左侧十字焦点坐标 (+) (对应图 2 中间的十字刻度) -->
-                <path d="M 190 60 L 190 70 M 185 65 L 195 65" stroke="rgba(255,255,255,0.22)" stroke-width="1" class="dark:stroke-white/25 stroke-black/20"/>
+                <path d="M 160 55 L 160 67 M 154 61 L 166 61" stroke="rgba(255,255,255,0.22)" stroke-width="1" class="dark:stroke-white/25 stroke-black/20"/>
                 <!-- 橙色轨道行星 / 探针 (带自发光辉光，复刻图 2 的金色亮点) -->
                 <circle cx="73%" cy="64%" r="3.6" fill="#f59e0b" filter="url(#planet-glow)" class="ag-orbit-planet"/>
             </svg>
 
-            <!-- 热力矩阵滚动层 (小方块网格，居于星轨上方，半透明小格子与星轨重叠产生深邃层次感) -->
-            <div class="relative z-10 overflow-x-auto pb-2 scrollbar-thin">
-                <div class="min-w-[700px] flex flex-col gap-2">
-                    <!-- 月份标签行 -->
-                    <div id="heatmap-months-header" class="flex text-[11px] text-neutral-400 pl-8 font-mono"></div>
-
-                    <div class="flex gap-2">
-                        <!-- 星期标签列 -->
-                        <div class="flex flex-col justify-between text-[10px] text-neutral-400 font-mono py-0.5 w-6 shrink-0 select-none">
-                            <span>周一</span>
-                            <span>周三</span>
-                            <span>周五</span>
-                            <span>周日</span>
-                        </div>
-
-                        <!-- 核心小方块网格 (自适应蓝曜 / 极客绿) -->
-                        <div id="heatmap-grid" class="flex gap-[3.5px]">
-                            <!-- 由 JS 动态渲染周列和 7 天格子 -->
-                        </div>
-                    </div>
+            <!-- 热力矩阵滚动层 (28 列 x 7 行，极简无边框，居于星轨上方，半透明小格子与星轨重叠产生深邃层次感) -->
+            <div class="relative z-10 overflow-x-auto pb-2 scrollbar-thin flex justify-center py-2">
+                <!-- 核心小方块网格 (自适应蓝曜 / 极客绿，1:1 还原图 2 纯净矩阵) -->
+                <div id="heatmap-grid" class="flex gap-[3.5px] justify-center">
+                    <!-- 由 JS 动态渲染 28 周列和 7 天格子 -->
                 </div>
             </div>
 
@@ -158,7 +142,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 mt-3 border-t border-black/5 dark:border-white/5 text-xs text-neutral-400 font-mono">
                 <div class="flex items-center gap-2">
                     <span id="ag-token-analogy" class="text-neutral-600 dark:text-neutral-300 font-medium">
-                        你的 研习时长 相当于 68 本《红楼梦》（或攻克 150 道高难度数学推导题）。
+                        你的 Token 用量相当于 68 本《红楼梦》。
                     </span>
                 </div>
 
@@ -239,6 +223,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             <div class="flex items-center gap-2.5 w-full md:w-auto justify-end flex-wrap">
                 <!-- 研习科目选择 -->
                 <select id="timer-subject" class="px-3 py-1.5 text-xs md:text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-black/90 dark:text-white/90 focus:outline-none focus:border-blue-500 transition-all cursor-pointer">
+                    <option value="强化学习 (RL / PPO)">🤖 强化学习 (RL / PPO)</option>
                     <option value="人工智能数学方法">🧮 人工智能数学方法</option>
                     <option value="概率论与数理统计">📊 概率论与数理统计</option>
                     <option value="主成分分析 (PCA)">📉 主成分分析 (PCA)</option>
@@ -725,14 +710,12 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             }
         }
 
-        // 2. 渲染天体星轨活动矩阵 (The Heatmap Grid)
+        // 2. 渲染天体星轨活动矩阵 (The Heatmap Grid - 28 周 x 7 天，1:1 复刻图 2 纯净星空矩阵)
         function renderHeatmap() {
             const gridEl = document.getElementById("heatmap-grid");
-            const monthsHeaderEl = document.getElementById("heatmap-months-header");
-            if (!gridEl || !monthsHeaderEl) return;
+            if (!gridEl) return;
 
             gridEl.innerHTML = "";
-            monthsHeaderEl.innerHTML = "";
 
             const dailyMap = new Map<string, number>();
             allSessions.forEach((s) => {
@@ -741,13 +724,11 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                 }
             });
 
-            const totalWeeks = 24;
+            const totalWeeks = 28;
             const now = new Date();
             const currentDayOfWeek = (now.getDay() + 6) % 7;
             const startDate = new Date(now);
             startDate.setDate(now.getDate() - currentDayOfWeek - (totalWeeks - 1) * 7);
-
-            const monthLabelsMap: { [weekIdx: number]: string } = {};
 
             const tooltip = document.getElementById("gh-tooltip");
             const ttDate = document.getElementById("gh-tooltip-date");
@@ -762,15 +743,10 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     cur.setDate(startDate.getDate() + w * 7 + d);
                     const dateStr = cur.toISOString().split("T")[0];
 
-                    if (cur.getDate() <= 7 && d === 0) {
-                        const mStr = `${cur.getMonth() + 1}月`;
-                        monthLabelsMap[w] = mStr;
-                    }
-
                     const mins = dailyMap.get(dateStr) || 0;
                     const hours = (mins / 60).toFixed(1);
 
-                    // 6 档色阶梯度 (对应图 2 中丰富的深蓝与亮光蓝)
+                    // 6 档色阶梯度 (完美对应图 2 中右侧丰富的层次深蓝与亮光蓝)
                     let levelColor = "var(--matrix-l0)";
                     if (mins > 0 && mins < 45) levelColor = "var(--matrix-l1)";
                     else if (mins >= 45 && mins < 90) levelColor = "var(--matrix-l2)";
@@ -802,13 +778,6 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
                     col.appendChild(cell);
                 }
                 gridEl.appendChild(col);
-            }
-
-            for (let w = 0; w < totalWeeks; w++) {
-                const labelSpan = document.createElement("div");
-                labelSpan.className = "w-[15.5px] text-center shrink-0";
-                labelSpan.textContent = monthLabelsMap[w] || "";
-                monthsHeaderEl.appendChild(labelSpan);
             }
         }
 
