@@ -108,26 +108,39 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
             </div>
         </div>
 
-        <!-- 🌌 天体星轨活动矩阵卡片 (The Celestial Orbit Activity Matrix from Image 1 & 2!) -->
+        <!-- 🌌 天体星轨活动矩阵卡片 (1:1 像素级复刻图 1 与图 2 的 Antigravity 天体星轨与活动矩阵) -->
         <div class="relative rounded-xl p-4 md:p-5 bg-black/[0.02] dark:bg-[#0c0e14] border border-black/[0.06] dark:border-white/[0.08] overflow-hidden mb-5 select-none" id="orbit-matrix-card">
-            <!-- 天体星轨 SVG 背景图层 (跨越整个矩阵视口，完美复刻图 2 中的椭圆、十字焦点与橙色行星) -->
-            <svg id="orbital-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <!-- 天体星轨 SVG 背景图层 (采用矢量 viewBox 保证在任意分辨率下完美对齐网格与焦点) -->
+            <svg id="orbital-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <filter id="planet-glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" result="blur"/>
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="blur"/>
                         <feMerge>
                             <feMergeNode in="blur"/>
                             <feMergeNode in="SourceGraphic"/>
                         </feMerge>
                     </filter>
                 </defs>
-                <!-- 椭圆星轨：虚线主轨道与细实线引力场 (完全按照图 2 的倾角与曲度呈现) -->
-                <ellipse cx="46%" cy="49%" rx="47%" ry="44%" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" stroke-dasharray="3 4" class="dark:stroke-white/10 stroke-black/10"/>
-                <ellipse cx="46%" cy="49%" rx="47%" ry="44%" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" class="dark:stroke-white/5 stroke-black/5"/>
-                <!-- 轨道左侧十字焦点坐标 (+) (对应图 2 中间的十字刻度) -->
-                <path d="M 160 55 L 160 67 M 154 61 L 166 61" stroke="rgba(255,255,255,0.22)" stroke-width="1" class="dark:stroke-white/25 stroke-black/20"/>
-                <!-- 橙色轨道行星 / 探针 (带自发光辉光，复刻图 2 的金色亮点) -->
-                <circle cx="73%" cy="64%" r="3.6" fill="#f59e0b" filter="url(#planet-glow)" class="ag-orbit-planet"/>
+                
+                <!-- 倾斜天体引力轨道系统 (角度倾斜约 -12°，与图 2 完全一致) -->
+                <g transform="rotate(-12 300 80)">
+                    <!-- 左半段实线轨道 (引力近心弧) -->
+                    <path d="M 120 80 A 210 65 0 0 1 480 80" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" class="dark:stroke-white/[0.09] stroke-black/[0.08]"/>
+                    <!-- 右下半段虚线轨道 (逃逸远心弧，对应图 2 的细密虚线) -->
+                    <path d="M 480 80 A 210 65 0 0 1 120 80" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.2" stroke-dasharray="3 4" class="dark:stroke-white/[0.14] stroke-black/[0.12]"/>
+                    
+                    <!-- 辅助引力圈 (细实线共振层) -->
+                    <ellipse cx="300" cy="80" rx="214" ry="67" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.8" class="dark:stroke-white/[0.04] stroke-black/[0.03]"/>
+                    
+                    <!-- 轨道左侧十字焦点坐标刻度 (+) (与图 2 中间偏左的十字刻度位置像素级对齐) -->
+                    <g transform="translate(195, 80)">
+                        <line x1="-7" y1="0" x2="7" y2="0" stroke="rgba(255,255,255,0.28)" stroke-width="1.1" class="dark:stroke-white/30 stroke-black/25"/>
+                        <line x1="0" y1="-7" x2="0" y2="7" stroke="rgba(255,255,255,0.28)" stroke-width="1.1" class="dark:stroke-white/30 stroke-black/25"/>
+                    </g>
+                    
+                    <!-- 橙金轨道行星 / 探针 (正处于下半段虚线轨道上，带星晕辉光，对应图 2 的金黄天体) -->
+                    <circle cx="430" cy="116" r="3.6" fill="#f59e0b" filter="url(#planet-glow)" class="ag-orbit-planet"/>
+                </g>
             </svg>
 
             <!-- 热力矩阵滚动层 (28 列 x 7 行，极简无边框，居于星轨上方，半透明小格子与星轨重叠产生深邃层次感) -->
@@ -354,13 +367,13 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
     :root[data-prism-preset="obsidian-dark"],
     :root[data-prism-preset="warm-dark"],
     :root[data-prism-preset="classic-dark"] {
-        --matrix-l0: #12151d;
-        --matrix-l1: #1e293b;
-        --matrix-l2: #2563eb;
-        --matrix-l3: #3b82f6;
-        --matrix-l4: #60a5fa;
-        --matrix-l5: #93c5fd;
-        --matrix-glow: rgba(59, 130, 246, 0.45);
+        --matrix-l0: #141720;
+        --matrix-l1: #213047;
+        --matrix-l2: #2b4163;
+        --matrix-l3: #385d8f;
+        --matrix-l4: #4a7ec5;
+        --matrix-l5: #72b0fd;
+        --matrix-glow: rgba(114, 176, 253, 0.45);
     }
 
     /* GitHub 极客绿配色方案 (当切换至绿曜模式时生效) */
@@ -414,7 +427,7 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
     }
     .ag-orbit-planet {
         animation: orbitPulse 3s ease-in-out infinite;
-        transform-origin: 73% 64%;
+        transform-origin: 430px 116px;
     }
 
     /* 柱状图条柱动效 */
@@ -442,43 +455,58 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
     const TIMER_STATE_KEY = "ohhh_study_active_timer_v1";
     const MATRIX_THEME_KEY = "ohhh_study_matrix_theme_v1";
 
-    // 默认学期历史种子数据（近 120 天围绕用户学科）
+    // 默认学期历史种子数据（1:1 对标 Antigravity 官方仪表盘：16 次专注会话，9 个活跃日，累计 61.6 小时）
     function generateSeedData(): StudySession[] {
         const list: StudySession[] = [];
         const subjects = [
+            "强化学习 (RL / PPO)",
             "人工智能数学方法",
             "概率论与数理统计",
             "主成分分析 (PCA)",
-            "电路分析与信号",
-            "算法与编程工程"
+            "前沿学术论文研读"
         ];
 
         const today = new Date();
-        for (let i = 120; i >= 0; i--) {
+        // 9 个活跃天数精确分布在近两周与关键节点，与图 1、图 2 右侧活跃热力小方块完全吻合
+        const activeDayOffsets = [0, 1, 3, 5, 6, 8, 10, 12, 14];
+        
+        // 16 次专注会话的时长配比（总计时长正好 3696 分钟 = 61.6 小时）
+        const sessionConfigs = [
+            // 今日 (偏移 0，对应图 2 最右列的丰富色阶与亮蓝核心)
+            { dayOff: 0, time: "19:30", dur: 260, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 0, time: "16:15", dur: 120, subj: "强化学习 (RL / PPO)", mode: "自由计时" as const },
+            { dayOff: 0, time: "14:00", dur: 90, subj: "人工智能数学方法", mode: "番茄专注" as const },
+            { dayOff: 0, time: "10:30", dur: 50, subj: "概率论与数理统计", mode: "自由计时" as const },
+            // 昨日 (偏移 1，对应图 2 次右列)
+            { dayOff: 1, time: "20:00", dur: 210, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 1, time: "15:30", dur: 85, subj: "主成分分析 (PCA)", mode: "自由计时" as const },
+            { dayOff: 1, time: "09:40", dur: 65, subj: "前沿学术论文研读", mode: "番茄专注" as const },
+            // 前期 7 个活跃日分布 (累计 9 个活跃天数，合计 16 个会话)
+            { dayOff: 3, time: "19:00", dur: 320, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 3, time: "14:20", dur: 180, subj: "人工智能数学方法", mode: "自由计时" as const },
+            { dayOff: 5, time: "15:00", dur: 280, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 6, time: "20:10", dur: 340, subj: "概率论与数理统计", mode: "番茄专注" as const },
+            { dayOff: 6, time: "14:00", dur: 240, subj: "主成分分析 (PCA)", mode: "自由计时" as const },
+            { dayOff: 8, time: "16:30", dur: 360, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 10, time: "19:40", dur: 390, subj: "人工智能数学方法", mode: "番茄专注" as const },
+            { dayOff: 12, time: "15:00", dur: 410, subj: "强化学习 (RL / PPO)", mode: "番茄专注" as const },
+            { dayOff: 14, time: "14:30", dur: 296, subj: "前沿学术论文研读", mode: "番茄专注" as const },
+        ];
+
+        sessionConfigs.forEach((cfg, idx) => {
             const d = new Date(today);
-            d.setDate(d.getDate() - i);
+            d.setDate(d.getDate() - cfg.dayOff);
             const dateStr = d.toISOString().split("T")[0];
+            list.push({
+                id: `ag-seed-${dateStr}-${idx}`,
+                date: dateStr,
+                time: cfg.time,
+                durationMinutes: cfg.dur,
+                subject: cfg.subj,
+                mode: cfg.mode
+            });
+        });
 
-            const dayOfWeek = d.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            const studyProb = isWeekend ? 0.95 : 0.88;
-
-            if (Math.random() < studyProb) {
-                const sessionCount = Math.floor(Math.random() * 2) + 1;
-                for (let s = 0; s < sessionCount; s++) {
-                    const dur = Math.floor(Math.random() * 75) + 45;
-                    const subj = subjects[Math.floor(Math.random() * subjects.length)];
-                    list.push({
-                        id: `seed-${dateStr}-${s}`,
-                        date: dateStr,
-                        time: `${14 + s * 3}:${Math.floor(Math.random() * 50).toString().padStart(2, "0")}`,
-                        durationMinutes: dur,
-                        subject: subj,
-                        mode: Math.random() > 0.4 ? "番茄专注" : "自由计时"
-                    });
-                }
-            }
-        }
         return list;
     }
 
